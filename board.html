@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CityLinks NYC â Member Board</title>
+  <title>CityLinks NYC &mdash; Member Board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,7 +20,7 @@
     input, textarea, select { font-family: inherit; }
 
     /* NAV */
-    nav { position: sticky; top: 0; z-index: 100; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; gap: 0; height: 62px; }
+    nav { position: sticky; top: 0; z-index: 100; background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; gap: 0; height: 80px; }
     .nav-logo { display: flex; align-items: center; margin-right: 32px; flex-shrink: 0; }
     .nav-tabs { display: flex; gap: 4px; flex: 1; }
     .nav-tab { background: transparent; border: none; color: var(--muted); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
@@ -160,7 +160,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:38px;width:auto;display:block;"></div>
+  <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:64px;width:auto;display:block;"></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showView('tee-times')">Tee Times</button>
     <button class="nav-tab" onclick="showView('members')">Members</button>
@@ -198,7 +198,7 @@
     <div class="section-hdr">
       <div>
         <h2>Members</h2>
-        <p>Everyone in the network â reach out and find your next playing partner.</p>
+        <p>Everyone in the network &mdash; reach out and find your next playing partner.</p>
       </div>
       <input class="search-bar" type="text" placeholder="Search members..." oninput="filterMembers(this.value)">
     </div>
@@ -212,7 +212,7 @@
   <div class="modal">
     <button class="modal-close" onclick="closePostModal()">Ã</button>
     <h2>Post a tee time</h2>
-    <p>Your contact info will be shared automatically from your profile â no need to re-enter it.</p>
+    <p>Your contact info will be shared automatically from your profile &mdash; no need to re-enter it.</p>
     <div class="msg msg-err" id="post-err"></div>
     <div class="msg msg-ok" id="post-ok"></div>
     <form id="post-form" onsubmit="handlePost(event)">
@@ -346,7 +346,7 @@
   function checkProfileComplete() {
     if (!currentProfile || currentProfile.phone) return;
     const wrap = document.getElementById('profile-banner-wrap');
-    wrap.innerHTML = `<div class="profile-banner"><p><strong>Complete your profile</strong> â add your phone number and handicap so other members can reach you.</p><button class="btn-post" onclick="openProfileModal()">Complete profile</button></div>`;
+    wrap.innerHTML = `<div class="profile-banner"><p><strong>Complete your profile</strong> &mdash; add your phone number and handicap so other members can reach you.</p><button class="btn-post" onclick="openProfileModal()">Complete profile</button></div>`;
   }
 
   // ââ TEE TIMES âââââââââââââââââââââââââââââââââââââââââââââ
@@ -424,7 +424,7 @@
         <div class="contact-reveal" id="cr-${t.id}">
           ${p.phone ? `<div class="contact-row"><span class="contact-label">Phone</span><span class="contact-val"><a href="tel:${p.phone}">${esc(p.phone)}</a></span></div>` : ''}
           ${(p.email||currentUser.email) ? `<div class="contact-row"><span class="contact-label">Email</span><span class="contact-val"><a href="mailto:${p.email||''}">${esc(p.email||'')}</a></span></div>` : ''}
-          ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file â reach out via the member directory.</span></div>` : ''}
+          ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file &mdash; reach out via the member directory.</span></div>` : ''}
         </div>
       </div>
     </div>`;
@@ -455,10 +455,10 @@
       requester_id: currentUser.id
     });
     if (error && !error.message.includes('duplicate')) {
-      btn.disabled = false; btn.textContent = "I'm in!"; showToast('Something went wrong â try again.'); return;
+      btn.disabled = false; btn.textContent = "I'm in!"; showToast('Something went wrong &mdash; try again.'); return;
     }
     btn.textContent = 'Request sent!';
-    showToast(`Your interest in ${course} on ${date} has been noted â reach out to ${hostName} directly to confirm.`, true);
+    showToast(`Your interest in ${course} on ${date} has been noted &mdash; reach out to ${hostName} directly to confirm.`, true);
   }
 
   async function deleteTeeTime(id) {
