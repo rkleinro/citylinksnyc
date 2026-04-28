@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CityLinks NYC — Play More Golf. Meet More Golfers.</title>
+  <title>CityLinks NYC â Play More Golf. Meet More Golfers.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -29,8 +29,7 @@
       background: var(--bg2); border-bottom: 1px solid var(--border);
       padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 62px;
     }
-    .nav-logo { font-size: 15px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text); }
-    .nav-logo span { color: var(--green); }
+    .nav-logo { display: flex; align-items: center; }
     .nav-actions { display: flex; gap: 10px; align-items: center; }
     .btn-ghost-nav { background: transparent; color: var(--muted); border: none; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; font-family: inherit; border-radius: 8px; transition: color 0.15s; }
     .btn-ghost-nav:hover { color: var(--text); }
@@ -139,7 +138,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo">City<span>Links</span> NYC</div>
+  <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:38px;width:auto;display:block;"></div>
   <div class="nav-actions">
     <button class="btn-ghost-nav" onclick="scrollToSignin()">Sign in</button>
     <button class="btn-cta-nav" onclick="scrollToJoin()">Join free</button>
@@ -154,9 +153,9 @@
       <span class="live-text" id="live-label">Active this week</span>
     </div>
     <h1>Play more golf.<br><em>Meet more golfers.</em></h1>
-    <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew — all in one place.</p>
+    <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew â all in one place.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="scrollToJoin()">Join the community — it's free</button>
+      <button class="btn-primary" onclick="scrollToJoin()">Join the community â it's free</button>
       <button class="btn-secondary" onclick="scrollToSignin()">Already a member</button>
     </div>
     <div class="members-preview">
@@ -174,20 +173,19 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-num" id="s-members">—</div><div class="stat-label">Members</div></div>
-  <div class="stat"><div class="stat-num" id="s-teetimes">—</div><div class="stat-label">Active Tee Times</div></div>
-  <div class="stat"><div class="stat-num" id="s-rounds">—</div><div class="stat-label">Rounds Played</div></div>
-  <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Always</div></div>
-</div>
+  <div class="stat"><div class="stat-num" id="s-members">â</div><div class="stat-label">Members</div></div>
+  <div class="stat"><div class="stat-num" id="s-teetimes">â</div><div class="stat-label">Active Tee Times</div></div>
+  <div class="stat"><div class="stat-num" id="s-rounds">â</div><div class="stat-label">Rounds Posted</div></div>
+  </div>
 
 <!-- PREVIEW -->
 <div style="max-width:1100px;margin:0 auto;">
   <div class="preview-wrap">
     <div class="section-label">This week's tee times</div>
     <div class="preview-grid">
-      <div class="preview-card"><div class="preview-card-photo"></div><div class="preview-card-body"><div class="preview-card-course">Bethpage Black</div><div class="preview-card-date">Sat May 3 · 7:14am</div><span class="preview-card-tag">2 spots open</span></div></div>
-      <div class="preview-card"><div class="preview-card-photo" style="background:linear-gradient(135deg,#1a2e3a,#2a4a5a)"></div><div class="preview-card-body"><div class="preview-card-course">Split Rock GC</div><div class="preview-card-date">Mon May 5 · 6:45am</div><span class="preview-card-tag">1 spot open</span></div></div>
-      <div class="preview-card"><div class="preview-card-photo" style="background:linear-gradient(135deg,#2a1a3a,#4a2a5a)"></div><div class="preview-card-body"><div class="preview-card-course">Pelham Golf Course</div><div class="preview-card-date">Sun May 4 · 9:30am</div><span class="preview-card-tag">3 spots open</span></div></div>
+      <div class="preview-card"><div class="preview-card-photo"></div><div class="preview-card-body"><div class="preview-card-course">Bethpage Black</div><div class="preview-card-date">Sat May 3 Â· 7:14am</div><span class="preview-card-tag">2 spots open</span></div></div>
+      <div class="preview-card"><div class="preview-card-photo" style="background:linear-gradient(135deg,#1a2e3a,#2a4a5a)"></div><div class="preview-card-body"><div class="preview-card-course">Split Rock GC</div><div class="preview-card-date">Mon May 5 Â· 6:45am</div><span class="preview-card-tag">1 spot open</span></div></div>
+      <div class="preview-card"><div class="preview-card-photo" style="background:linear-gradient(135deg,#2a1a3a,#4a2a5a)"></div><div class="preview-card-body"><div class="preview-card-course">Pelham Golf Course</div><div class="preview-card-date">Sun May 4 Â· 9:30am</div><span class="preview-card-tag">3 spots open</span></div></div>
       <div class="preview-overlay">
         <div class="preview-box">
           <strong>Members only</strong>
@@ -204,17 +202,17 @@
     <p class="how-sub">No apps, no fees, no nonsense. Just NYC golfers helping each other play more.</p>
     <div class="how-grid">
       <div class="how-card">
-        <div class="how-num">01 — POST A GAME</div>
+        <div class="how-num">01 â POST A GAME</div>
         <h3>Share your tee time</h3>
-        <p>Have a tee time or access to a course? Post it on the board. Don't have one yet? Post anyway — use it to find playing partners or coordinate a game with people in your area.</p>
+        <p>Have a tee time or access to a course? Post it on the board. Don't have one yet? Post anyway â use it to find playing partners or coordinate a game with people in your area.</p>
       </div>
       <div class="how-card">
-        <div class="how-num">02 — FIND YOUR CREW</div>
+        <div class="how-num">02 â FIND YOUR CREW</div>
         <h3>Browse and connect</h3>
-        <p>See who's playing this weekend. Filter by date and reach out directly. Whether you have a car, need a ride, or just want to split a tee time — there's a spot for you.</p>
+        <p>See who's playing this weekend. Filter by date and reach out directly. Whether you have a car, need a ride, or just want to split a tee time â there's a spot for you.</p>
       </div>
       <div class="how-card">
-        <div class="how-num">03 — PLAY MORE GOLF</div>
+        <div class="how-num">03 â PLAY MORE GOLF</div>
         <h3>Show up and tee off</h3>
         <p>Coordinate the details, meet at the course, and play. You'll get a weekly email every Monday with all posted games. The more people join, the better it gets for everyone.</p>
       </div>
@@ -234,10 +232,10 @@
       <div class="msg msg-success" id="signin-ok"></div>
       <form onsubmit="handleSignin(event)">
         <div class="form-group"><label>Email</label><input class="form-input" type="email" id="si-email" placeholder="your@email.com" required></div>
-        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="si-pass" placeholder="••••••••" required></div>
+        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="si-pass" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required></div>
         <button class="btn-full btn-full-green" type="submit" id="si-btn">Sign in</button>
       </form>
-      <div class="auth-footer"><a href="#" onclick="forgotPassword(event)">Forgot password?</a> &nbsp;·&nbsp; New here? <a href="#" onclick="scrollToJoin()">Join free</a></div>
+      <div class="auth-footer"><a href="#" onclick="forgotPassword(event)">Forgot password?</a> &nbsp;Â·&nbsp; New here? <a href="#" onclick="scrollToJoin()">Join free</a></div>
     </div>
 
     <!-- JOIN -->
@@ -267,7 +265,7 @@
   </div>
 </div>
 
-<footer>CityLinks NYC &nbsp;·&nbsp; A member-run golf community &nbsp;·&nbsp; New York City &nbsp;·&nbsp; <a href="mailto:hello@citylinksnyc.com">hello@citylinksnyc.com</a></footer>
+<footer>CityLinks NYC &nbsp;Â·&nbsp; A member-run golf community &nbsp;Â·&nbsp; New York City &nbsp;Â·&nbsp; <a href="mailto:hello@citylinksnyc.com">hello@citylinksnyc.com</a></footer>
 
 <script>
   const SUPABASE_URL = 'https://ecdfabwgojvrkzlbknww.supabase.co';
@@ -317,7 +315,7 @@
     btn.textContent = 'Creating account...'; btn.disabled = true; err.style.display = 'none'; ok.style.display = 'none';
     const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: first, last_name: last } } });
     if (error) { err.textContent = error.message; err.style.display = 'block'; btn.textContent = 'Create my free account'; btn.disabled = false; }
-    else { ok.textContent = `Welcome, ${first}! Check your email to confirm your account, then sign in.`; ok.style.display = 'block'; document.querySelector('form:last-of-type').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
+    else { ok.textContent = `Welcome, ${first}! Your account is ready — sign in below.`; ok.style.display = 'block'; document.querySelector('form:last-of-type').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
   }
 
   async function forgotPassword(e) {
@@ -326,7 +324,7 @@
     if (!email) return;
     const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password.html' });
     const el = document.getElementById(error ? 'signin-err' : 'signin-ok');
-    el.textContent = error ? error.message : 'Password reset email sent — check your inbox.';
+    el.textContent = error ? error.message : 'Password reset email sent â check your inbox.';
     el.style.display = 'block';
   }
 
