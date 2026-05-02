@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CityLinks NYC &mdash; Play More Golf. Meet More Golfers.</title>
+  <title>CityLinks NYC â Play More Golf. Meet More Golfers.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -30,6 +30,7 @@
       padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 80px;
     }
     .nav-logo { display: flex; align-items: center; }
+    
     .nav-actions { display: flex; gap: 10px; align-items: center; }
     .btn-ghost-nav { background: transparent; color: var(--muted); border: none; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; font-family: inherit; border-radius: 8px; transition: color 0.15s; }
     .btn-ghost-nav:hover { color: var(--text); }
@@ -136,7 +137,6 @@
   </style>
 </head>
 <body>
-
 <nav>
   <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:64px;width:auto;display:block;"></div>
   <div class="nav-actions">
@@ -144,7 +144,6 @@
     <button class="btn-cta-nav" onclick="scrollToJoin()">Join free</button>
   </div>
 </nav>
-
 <!-- HERO -->
 <div class="hero-wrap">
   <div class="hero">
@@ -153,9 +152,9 @@
       <span class="live-text" id="live-label">Active this week</span>
     </div>
     <h1>Play more golf.<br><em>Meet more golfers.</em></h1>
-    <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew &mdash; all in one place.</p>
+    <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew â all in one place.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="scrollToJoin()">Join the community &mdash; it's free</button>
+      <button class="btn-primary" onclick="scrollToJoin()">Join the community â it's free</button>
       <button class="btn-secondary" onclick="scrollToSignin()">Already a member</button>
     </div>
     <div class="members-preview">
@@ -170,14 +169,12 @@
     </div>
   </div>
 </div>
-
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-num" id="s-members">&mdash;</div><div class="stat-label">Members</div></div>
-  <div class="stat"><div class="stat-num" id="s-teetimes">&mdash;</div><div class="stat-label">Active Tee Times</div></div>
-  <div class="stat"><div class="stat-num" id="s-rounds">&mdash;</div><div class="stat-label">Rounds Posted</div></div>
-  </div>
-
+  <div class="stat"><div class="stat-num" id="s-members">â</div><div class="stat-label">Members</div></div>
+  <div class="stat"><div class="stat-num" id="s-teetimes">â</div><div class="stat-label">Active Tee Times</div></div>
+  <div class="stat"><div class="stat-num" id="s-rounds">â</div><div class="stat-label">Rounds Posted</div></div>
+</div>
 <!-- PREVIEW -->
 <div style="max-width:1100px;margin:0 auto;">
   <div class="preview-wrap">
@@ -195,35 +192,32 @@
       </div>
     </div>
   </div>
-
   <!-- HOW IT WORKS -->
   <div class="how-wrap">
     <h2>How it works</h2>
     <p class="how-sub">No apps, no fees, no nonsense. Just NYC golfers helping each other play more.</p>
     <div class="how-grid">
       <div class="how-card">
-        <div class="how-num">01 &mdash; POST A GAME</div>
+        <div class="how-num">01 â POST A GAME</div>
         <h3>Share your tee time</h3>
-        <p>Have a tee time or access to a course? Post it on the board. Don't have one yet? Post anyway &mdash; use it to find playing partners or coordinate a game with people in your area.</p>
+        <p>Have a tee time or access to a course? Post it on the board. Don't have one yet? Post anyway â use it to find playing partners or coordinate a game with people in your area.</p>
       </div>
       <div class="how-card">
-        <div class="how-num">02 &mdash; FIND YOUR CREW</div>
+        <div class="how-num">02 â FIND YOUR CREW</div>
         <h3>Browse and connect</h3>
-        <p>See who's playing this weekend. Filter by date and reach out directly. Whether you have a car, need a ride, or just want to split a tee time &mdash; there's a spot for you.</p>
+        <p>See who's playing this weekend. Filter by date and reach out directly. Whether you have a car, need a ride, or just want to split a tee time â there's a spot for you.</p>
       </div>
       <div class="how-card">
-        <div class="how-num">03 &mdash; PLAY MORE GOLF</div>
+        <div class="how-num">03 â PLAY MORE GOLF</div>
         <h3>Show up and tee off</h3>
         <p>Coordinate the details, meet at the course, and play. You'll get a weekly email every Monday with all posted games. The more people join, the better it gets for everyone.</p>
       </div>
     </div>
   </div>
 </div>
-
 <!-- AUTH -->
 <div class="auth-wrap">
   <div class="auth-inner">
-
     <!-- SIGN IN -->
     <div class="auth-card" id="signin-card">
       <h2>Welcome back</h2>
@@ -232,104 +226,4 @@
       <div class="msg msg-success" id="signin-ok"></div>
       <form onsubmit="handleSignin(event)">
         <div class="form-group"><label>Email</label><input class="form-input" type="email" id="si-email" placeholder="your@email.com" required></div>
-        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="si-pass" placeholder="&mdash;¢&mdash;¢&mdash;¢&mdash;¢&mdash;¢&mdash;¢&mdash;¢&mdash;¢" required></div>
-        <button class="btn-full btn-full-green" type="submit" id="si-btn">Sign in</button>
-      </form>
-      <div class="auth-footer"><a href="#" onclick="forgotPassword(event)">Forgot password?</a> &nbsp;Â·&nbsp; New here? <a href="#" onclick="scrollToJoin()">Join free</a></div>
-    </div>
-
-    <!-- JOIN -->
-    <div class="auth-card" id="join-card">
-      <h2>Join the community</h2>
-      <p>Free, always. Sign up and start connecting with NYC golfers right away.</p>
-      <ul class="perks">
-        <li><div class="perk-dot"></div>Browse and post tee times every week</li>
-        <li><div class="perk-dot"></div>Find playing partners and share rides from the city</li>
-        <li><div class="perk-dot"></div>Weekly tee time roundup every Monday morning</li>
-        <li><div class="perk-dot"></div>Access to a growing network of 60+ NYC golfers</li>
-      </ul>
-      <div class="msg msg-error" id="su-err"></div>
-      <div class="msg msg-success" id="su-ok"></div>
-      <form onsubmit="handleSignup(event)">
-        <div class="form-row">
-          <div class="form-group"><label>First name</label><input class="form-input" type="text" id="su-first" placeholder="Ross" required></div>
-          <div class="form-group"><label>Last name</label><input class="form-input" type="text" id="su-last" placeholder="Klein" required></div>
-        </div>
-        <div class="form-group"><label>Email</label><input class="form-input" type="email" id="su-email" placeholder="your@email.com" required></div>
-        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="su-pass" placeholder="At least 8 characters" minlength="8" required></div>
-        <button class="btn-full btn-full-outline" type="submit" id="su-btn">Create my free account</button>
-      </form>
-      <div class="auth-footer">Already a member? <a href="#" onclick="scrollToSignin()">Sign in</a></div>
-    </div>
-
-  </div>
-</div>
-
-<footer>CityLinks NYC &nbsp;Â·&nbsp; A member-run golf community &nbsp;Â·&nbsp; New York City &nbsp;Â·&nbsp; <a href="mailto:hello@citylinksnyc.com">hello@citylinksnyc.com</a></footer>
-
-<script>
-  const SUPABASE_URL = 'https://ecdfabwgojvrkzlbknww.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjZGZhYndnb2p2cmt6bGJrbnd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTIxNjUsImV4cCI6MjA5Mjc4ODE2NX0.hSpRtYo4cv0wKM6LwJRGtxLXQMboRZjwDQRBHRdVlO0';
-  const { createClient } = supabase;
-  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  window.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) { window.location.href = 'board.html'; return; }
-    loadStats();
-  });
-
-  async function loadStats() {
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      const [{ count: mem }, { count: active }, { count: rounds }] = await Promise.all([
-        sb.from('profiles').select('*', { count: 'exact', head: true }),
-        sb.from('tee_times').select('*', { count: 'exact', head: true }).gte('date', today),
-        sb.from('tee_times').select('*', { count: 'exact', head: true }).lt('date', today)
-      ]);
-      if (mem    !== null) { document.getElementById('s-members').textContent = mem; document.getElementById('hero-member-count').textContent = mem; }
-      if (active !== null) { document.getElementById('s-teetimes').textContent = active; document.getElementById('live-label').textContent = `${active} tee time${active === 1 ? '' : 's'} posted this week`; }
-      if (rounds !== null)   document.getElementById('s-rounds').textContent = rounds;
-    } catch(e) { document.getElementById('hero-member-count').textContent = '60+'; }
-  }
-
-  async function handleSignin(e) {
-    e.preventDefault();
-    const btn = document.getElementById('si-btn');
-    const err = document.getElementById('signin-err');
-    btn.textContent = 'Signing in...'; btn.disabled = true; err.style.display = 'none';
-    const { error } = await sb.auth.signInWithPassword({ email: document.getElementById('si-email').value.trim(), password: document.getElementById('si-pass').value });
-    if (error) { err.textContent = error.message === 'Invalid login credentials' ? 'Email or password is incorrect.' : error.message; err.style.display = 'block'; btn.textContent = 'Sign in'; btn.disabled = false; }
-    else window.location.href = 'board.html';
-  }
-
-  async function handleSignup(e) {
-    e.preventDefault();
-    const btn = document.getElementById('su-btn');
-    const err = document.getElementById('su-err');
-    const ok  = document.getElementById('su-ok');
-    const first = document.getElementById('su-first').value.trim();
-    const last  = document.getElementById('su-last').value.trim();
-    const email = document.getElementById('su-email').value.trim();
-    const pass  = document.getElementById('su-pass').value;
-    btn.textContent = 'Creating account...'; btn.disabled = true; err.style.display = 'none'; ok.style.display = 'none';
-    const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: first, last_name: last } } });
-    if (error) { err.textContent = error.message; err.style.display = 'block'; btn.textContent = 'Create my free account'; btn.disabled = false; }
-    else { ok.textContent = `Welcome, ${first}! Your account is ready — sign in below.`; ok.style.display = 'block'; document.querySelector('form:last-of-type').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
-  }
-
-  async function forgotPassword(e) {
-    e.preventDefault();
-    const email = document.getElementById('si-email').value.trim() || prompt('Enter your email:');
-    if (!email) return;
-    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password.html' });
-    const el = document.getElementById(error ? 'signin-err' : 'signin-ok');
-    el.textContent = error ? error.message : 'Password reset email sent &mdash; check your inbox.';
-    el.style.display = 'block';
-  }
-
-  function scrollToSignin() { document.getElementById('signin-card').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => document.getElementById('si-email').focus(), 400); }
-  function scrollToJoin()   { document.getElementById('join-card').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => document.getElementById('su-first').focus(), 400); }
-</script>
-</body>
-</html>
+        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="si-pass" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢""&WV&VCãÂöFcà¢Æ'WGFöâ6Æ73Ò&'FâÖgVÆÂ'FâÖgVÆÂÖw&VVâ"GSÒ'7V&ÖB"CÒ'6Ö'Fâ#å6vâãÂö'WGFöãà¢Âöf÷&Óà¢ÆFb6Æ73Ò&WFÖfö÷FW"#ãÆ&VcÒ"2"öæ6Æ6³Ò&f÷&v÷E77v÷&BWfVçB#äf÷&v÷B77v÷&CóÂöâfæ'7¼+rfæ'7²æWrW&SòÆ&VcÒ"2"öæ6Æ6³Ò'67&öÆÅFô¦öâ#ä¦öâg&VSÂöãÂöFcà¢ÂöFcà¢ÂÒÒ¤ôâÒÓà¢ÆFb6Æ73Ò&WFÖ6&B"CÒ&¦öâÖ6&B#à¢Æ#ä¦öâFR6öÖ×VæGÂö#à¢Çäg&VRÂÇv2â6vâWæB7F'B6öææV7FærvFå2vöÆfW'2&vBvãÂ÷à¢ÇVÂ6Æ73Ò'W&·2#à¢ÆÆãÆFb6Æ73Ò'W&²ÖF÷B#ãÂöFcä'&÷w6RæB÷7BFVRFÖW2WfW'vVV³ÂöÆà¢ÆÆãÆFb6Æ73Ò'W&²ÖF÷B#ãÂöFcäfæBÆær'FæW'2æB6&R&FW2g&öÒFR6GÂöÆà¢ÆÆãÆFb6Æ73Ò'W&²ÖF÷B#ãÂöFcåvVV¶ÇFVRFÖR&÷VæGWWfW'ÖöæFÖ÷&ææsÂöÆà¢ÆÆãÆFb6Æ73Ò'W&²ÖF÷B#ãÂöFcä66W72Fòw&÷væræWGv÷&²öbc²å2vöÆfW'3ÂöÆà¢Â÷VÃà¢ÆFb6Æ73Ò&×6r×6rÖW'&÷""CÒ'7RÖW'"#ãÂöFcà¢ÆFb6Æ73Ò&×6r×6r×7V66W72"CÒ'7RÖö²#ãÂöFcà¢Æf÷&Òöç7V&ÖCÒ&æFÆU6vçWWfVçB#à¢ÆFb6Æ73Ò&f÷&Ò×&÷r#à¢ÆFb6Æ73Ò&f÷&ÒÖw&÷W#ãÆÆ&VÃäf'7BæÖSÂöÆ&VÃãÆçWB6Æ73Ò&f÷&ÒÖçWB"GSÒ'FWB"CÒ'7RÖf'7B"Æ6VöÆFW#Ò%&÷72"&WV&VCãÂöFcà¢ÆFb6Æ73Ò&f÷&ÒÖw&÷W#ãÆÆ&VÃäÆ7BæÖSÂöÆ&VÃãÆçWB6Æ73Ò&f÷&ÒÖçWB"GSÒ'FWB"CÒ'7RÖÆ7B"Æ6VöÆFW#Ò$¶ÆVâ"&WV&VCãÂöFcà¢ÂöFcà¢ÆFb6Æ73Ò&f÷&ÒÖw&÷W#ãÆÆ&VÃäVÖÃÂöÆ&VÃãÆçWB6Æ73Ò&f÷&ÒÖçWB"GSÒ&VÖÂ"CÒ'7RÖVÖÂ"Æ6VöÆFW#Ò'÷W$VÖÂæ6öÒ"&WV&VCãÂöFcà¢ÆFb6Æ73Ò&f÷&ÒÖw&÷W#ãÆÆ&VÃå77v÷&CÂöÆ&VÃãÆçWB6Æ73Ò&f÷&ÒÖçWB"GSÒ'77v÷&B"CÒ'7R×72"Æ6VöÆFW#Ò$BÆV7B6&7FW'2"ÖæÆVæwFÒ#"&WV&VCãÂöFcà¢Æ'WGFöâ6Æ73Ò&'FâÖgVÆÂ'FâÖgVÆÂÖ÷WFÆæR"GSÒ'7V&ÖB"CÒ'7RÖ'Fâ#ä7&VFR×g&VR66÷VçCÂö'WGFöãà¢Âöf÷&Óà¢ÆFb6Æ73Ò&WFÖfö÷FW"#äÇ&VGÖVÖ&W#òÆ&VcÒ"2"öæ6Æ6³Ò'67&öÆÅFõ6væâ#å6vâãÂöãÂöFcà¢ÂöFcà¢ÂöFcà£ÂöFcà £Æfö÷FW#ä6GÆæ·2å2fæ'7¼+rfæ'7²ÖVÖ&W"×'VâvöÆb6öÖ×VæGfæ'7¼+rfæ'7²æWr÷&²6Gfæ'7¼+rfæ'7²Æ&VcÒ&ÖÇFó¦VÆÆô6GÆæ·6ç2æ6öÒ#æVÆÆô6GÆæ·6ç2æ6öÓÂöãÂöfö÷FW#à £Ç67&Cà¢6öç7B5U$4UõU$ÂÒvGG3¢òöV6Ff'vvö§g&·¦Æ&¶çwrç7W&6Ræ6òs°¢6öç7B5U$4Uô´UÒvW¦$v6ö¤W¤æ4å#V44d·d4£æW§34Öö§¦E&Ôg¥¥44ä¦Å¦dÕf¥¤u¦æFæ#'&6×Cf$t§&&æC4v6Ó5¥4dÔgV##FÄ4§ö¤S4ç¦7ÕDæ¥W4ÕcF44dÖ¤TÖ¦3DôDS$åæ7'EóF7ct´ÓdÇt¥$wGÅÖ&õ%¦§tE$$&EfÄós°¢6öç7B²7&VFT6ÆVçBÒÒ7W&6S°¢6öç7B6"Ò7&VFT6ÆVçB5U$4UõU$ÂÂ5U$4Uô´U° ¢væF÷ræFDWfVçDÆ7FVæW"tDôÔ6öçFVçDÆöFVBrÂ7æ2Óâ°¢6öç7B²FF¢²6W76öâÒÒÒvB6"æWFævWE6W76öâ°¢b6W76öâ²væF÷ræÆö6Föâæ&VbÒv&ö&BæFÖÂs²&WGW&ã²Ð¢ÆöE7FG2°¢Ò° ¢7æ2gVæ7FöâÆöE7FG2°¢G'°¢6öç7BFöFÒæWrFFRçFô4õ7G&ærç7ÆBuBr³Ó°¢6öç7B·²6÷VçC¢ÖVÒÒÂ²6÷VçC¢7FfRÒÂ²6÷VçC¢&÷VæG2ÕÒÒvB&öÖ6RæÆÂ°¢6"æg&öÒw&öfÆW2rç6VÆV7Br¢rÂ²6÷VçC¢vW7BrÂVC¢G'VRÒÀ¢6"æg&öÒwFVU÷FÖW2rç6VÆV7Br¢rÂ²6÷VçC¢vW7BrÂVC¢G'VRÒæwFRvFFRrÂFöFÀ¢6"æg&öÒwFVU÷FÖW2rç6VÆV7Br¢rÂ²6÷VçC¢vW7BrÂVC¢G'VRÒæÇBvFFRrÂFöF¢Ò°¢bÖVÒÓÒçVÆÂ²Fö7VÖVçBævWDVÆVÖVçD'Bw2ÖÖVÖ&W'2rçFWD6öçFVçBÒÖVÓ²Fö7VÖVçBævWDVÆVÖVçD'BvW&òÖÖVÖ&W"Ö6÷VçBrçFWD6öçFVçBÒÖVÓ²Ð¢b7FfRÓÒçVÆÂ²Fö7VÖVçBævWDVÆVÖVçD'Bw2×FVWFÖW2rçFWD6öçFVçBÒ7FfS²Fö7VÖVçBævWDVÆVÖVçD'BvÆfRÖÆ&VÂrçFWD6öçFVçBÒG¶7FfWÒFVRFÖRG¶7FfRÓÓÒòrr¢w2wÒ÷7FVBF2vVV¶²Ð¢b&÷VæG2ÓÒçVÆÂFö7VÖVçBævWDVÆVÖVçD'Bw2×&÷VæG2rçFWD6öçFVçBÒ&÷VæG3°¢Ò6F6R²Fö7VÖVçBævWDVÆVÖVçD'BvW&òÖÖVÖ&W"Ö6÷VçBrçFWD6öçFVçBÒsc²s²Ð¢Ð ¢7æ2gVæ7FöâæFÆU6væâR°¢Rç&WfVçDFVfVÇB°¢6öç7B'FâÒFö7VÖVçBævWDVÆVÖVçD'Bw6Ö'Fâr°¢6öç7BW'"ÒFö7VÖVçBævWDVÆVÖVçD'Bw6væâÖW'"r°¢'FâçFWD6öçFVçBÒu6væærââââs²'FâæF6&ÆVBÒG'VS²W'"ç7GÆRæF7ÆÒvæöæRs°¢6öç7B²W'&÷"ÒÒvB6"æWFç6väåvF77v÷&B²VÖÃ¢Fö7VÖVçBævWDVÆVÖVçD'Bw6ÖVÖÂrçfÇVRçG&ÒÂ77v÷&C¢Fö7VÖVçBævWDVÆVÖVçD'Bw6×72rçfÇVRÒ°¢bW'&÷"²W'"çFWD6öçFVçBÒW'&÷"æÖW76vRÓÓÒtçfÆBÆövâ7&VFVçFÇ2ròtVÖÂ÷"77v÷&B2æ6÷'&V7Bâr¢W'&÷"æÖW76vS²W'"ç7GÆRæF7ÆÒv&Æö6²s²'FâçFWD6öçFVçBÒu6vââs²'FâæF6&ÆVBÒfÇ6S²Ð¢VÇ6RvæF÷ræÆö6Föâæ&VbÒv&ö&BæFÖÂs°¢Ð ¢7æ2gVæ7FöâæFÆU6vçWR°¢Rç&WfVçDFVfVÇB°¢6öç7B'FâÒFö7VÖVçBævWDVÆVÖVçD'Bw7RÖ'Fâr°¢6öç7BW'"ÒFö7VÖVçBævWDVÆVÖVçD'Bw7RÖW'"r°¢6öç7Bö²ÒFö7VÖVçBævWDVÆVÖVçD'Bw7RÖö²r°¢6öç7Bf'7BÒFö7VÖVçBævWDVÆVÖVçD'Bw7RÖf'7BrçfÇVRçG&Ò°¢6öç7BÆ7BÒFö7VÖVçBævWDVÆVÖVçD'Bw7RÖÆ7BrçfÇVRçG&Ò°¢6öç7BVÖÂÒFö7VÖVçBævWDVÆVÖVçD'Bw7RÖVÖÂrçfÇVRçG&Ò°¢6öç7B72ÒFö7VÖVçBævWDVÆVÖVçD'Bw7R×72rçfÇVS°¢'FâçFWD6öçFVçBÒt7&VFær66÷VçBâââs²'FâæF6&ÆVBÒG'VS²W'"ç7GÆRæF7ÆÒvæöæRs²ö²ç7GÆRæF7ÆÒvæöæRs°¢6öç7B²W'&÷"ÒÒvB6"æWFç6våW²VÖÂÂ77v÷&C¢72Â÷Föç3¢²FF¢²f'7EöæÖS¢f'7BÂÆ7EöæÖS¢Æ7BÒÒÒ°¢bW'&÷"²W'"çFWD6öçFVçBÒW'&÷"æÖW76vS²W'"ç7GÆRæF7ÆÒv&Æö6²s²'FâçFWD6öçFVçBÒt7&VFR×g&VR66÷VçBs²'FâæF6&ÆVBÒfÇ6S²Ð¢VÇ6R²ö²çFWD6öçFVçBÒvVÆ6öÖRÂG¶f'7GÒ÷W"66÷VçB2&VGÒ6vââ&VÆ÷ræ²ö²ç7GÆRæF7ÆÒv&Æö6²s²Fö7VÖVçBçVW'6VÆV7F÷"vf÷&Ó¦Æ7BÖöb×GRrç&W6WB²'FâçFWD6öçFVçBÒt7&VFR×g&VR66÷VçBs²'FâæF6&ÆVBÒfÇ6S²Ð¢Ð ¢7æ2gVæ7Föâf÷&v÷E77v÷&BR°¢Rç&WfVçDFVfVÇB°¢6öç7BVÖÂÒFö7VÖVçBævWDVÆVÖVçD'Bw6ÖVÖÂrçfÇVRçG&Ò°¢6öç7BW'"ÒFö7VÖVçBævWDVÆVÖVçD'Bw6væâÖW'"r°¢6öç7Bö²ÒFö7VÖVçBævWDVÆVÖVçD'Bw6væâÖö²r°¢W'"ç7GÆRæF7ÆÒvæöæRs²ö²ç7GÆRæF7ÆÒvæöæRs°¢bVÖÂ°¢W'"çFWD6öçFVçBÒtVçFW"÷W"VÖÂFG&W72&÷fRÂFVâ6Æ6²f÷&v÷B77v÷&Bâs°¢W'"ç7GÆRæF7ÆÒv&Æö6²s°¢Fö7VÖVçBævWDVÆVÖVçD'Bw6ÖVÖÂræfö7W2°¢&WGW&ã°¢Ð¢6öç7B²W'&÷"ÒÒvB6"æWFç&W6WE77v÷&Df÷$VÖÂVÖÂÂ°¢&VF&V7EFó¢vGG3¢òö6GÆæ·6ç2æ6öÒ÷&W6WB×77v÷&BæFÖÂp¢Ò°¢bW'&÷"°¢W'"çFWD6öçFVçBÒW'&÷"æÖW76vS°¢W'"ç7GÆRæF7ÆÒv&Æö6²s°¢ÒVÇ6R°¢ö²çFWD6öçFVçBÒu&W6WBVÖÂ6VçBÒ6V6²÷W"ææ÷æB7ÒföÆFW"âs°¢ö²ç7GÆRæF7ÆÒv&Æö6²s°¢Ð¢Ð ¢gVæ7Föâ67&öÆÅFõ6væâ²Fö7VÖVçBævWDVÆVÖVçD'Bw6væâÖ6&Brç67&öÆÄçFõfWr²&Vf÷#¢w6Öö÷FrÂ&Æö6³¢v6VçFW"rÒ²6WEFÖV÷WBÓâFö7VÖVçBævWDVÆVÖVçD'Bw6ÖVÖÂræfö7W2ÂC²Ð¢gVæ7Föâ67&öÆÅFô¦öâ²Fö7VÖVçBævWDVÆVÖVçD'Bv¦öâÖ6&Brç67&öÆÄçFõfWr²&Vf÷#¢w6Öö÷FrÂ&Æö6³¢v6VçFW"rÒ²6WEFÖV÷WBÓâFö7VÖVçBævWDVÆVÖVçD'Bw7RÖf'7Bræfö7W2ÂC²Ð£Â÷67&Cà£Âö&öGà£ÂöFÖÃà
