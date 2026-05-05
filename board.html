@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CityLinks NYC â Member Board</title>
+  <title>CityLinks NYC — Member Board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -157,7 +157,8 @@
       .form-row-2 { grid-template-columns: 1fr; }
     }
   </style>
-</head><body>
+</head>
+<body>
 
 <nav>
   <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:64px;width:auto;display:block;"></div>
@@ -198,7 +199,7 @@
     <div class="section-hdr">
       <div>
         <h2>Members</h2>
-        <p>Everyone in the network â reach out and find your next playing partner.</p>
+        <p>Everyone in the network — reach out and find your next playing partner.</p>
       </div>
       <input class="search-bar" type="text" placeholder="Search members..." oninput="filterMembers(this.value)">
     </div>
@@ -210,9 +211,9 @@
 <!-- POST TEE TIME MODAL -->
 <div class="modal-overlay" id="post-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closePostModal()">Ã</button>
+    <button class="modal-close" onclick="closePostModal()">×</button>
     <h2>Post a tee time</h2>
-    <p>Your contact info will be shared automatically from your profile â no need to re-enter it.</p>
+    <p>Your contact info will be shared automatically from your profile — no need to re-enter it.</p>
     <div class="msg msg-err" id="post-err"></div>
     <div class="msg msg-ok" id="post-ok"></div>
     <form id="post-form" onsubmit="handlePost(event)">
@@ -236,7 +237,7 @@
 <!-- EDIT PROFILE MODAL -->
 <div class="modal-overlay" id="profile-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeProfileModal()">Ã</button>
+    <button class="modal-close" onclick="closeProfileModal()">×</button>
     <h2>Your profile</h2>
     <p>This info appears in the member directory and is shared when you post a tee time.</p>
     <div class="msg msg-err" id="prof-err"></div>
@@ -278,7 +279,7 @@
   let allMembers     = [];
   let realtimeChannel = null;
 
-  // ââ COURSE PHOTOS âââââââââââââââââââââââââââââââââââââââââ
+  // ── COURSE PHOTOS ─────────────────────────────────────────
   const PHOTOS = [
     'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=700&q=80&fit=crop',
     'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=700&q=80&fit=crop',
@@ -303,7 +304,7 @@
   }
   function initials(p) { return ((p.first_name||'')[0]||'') + ((p.last_name||'')[0]||''); }
 
-  // ââ INIT âââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── INIT ─────────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', async () => {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'index.html'; return; }
@@ -327,7 +328,7 @@
     document.getElementById('p-date').min = new Date().toISOString().split('T')[0];
   });
 
-  // ââ PROFILE âââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── PROFILE ───────────────────────────────────────────────
   async function loadProfile() {
     const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
     currentProfile = data;
@@ -350,10 +351,10 @@
   function checkProfileComplete() {
     if (!currentProfile || currentProfile.phone) return;
     const wrap = document.getElementById('profile-banner-wrap');
-    wrap.innerHTML = `<div class="profile-banner"><p><strong>Complete your profile</strong> â add your phone number and handicap so other members can reach you.</p><button class="btn-post" onclick="openProfileModal()">Complete profile</button></div>`;
+    wrap.innerHTML = `<div class="profile-banner"><p><strong>Complete your profile</strong> — add your phone number and handicap so other members can reach you.</p><button class="btn-post" onclick="openProfileModal()">Complete profile</button></div>`;
   }
 
-  // ââ TEE TIMES âââââââââââââââââââââââââââââââââââââââââââââ
+  // ── TEE TIMES ─────────────────────────────────────────────
   async function loadTeeTimes() {
     const today = new Date().toISOString().split('T')[0];
     const { data: times, error } = await sb
@@ -366,7 +367,7 @@
     if (error) { console.error(error); return; }
     if (!times || !times.length) { renderTeeTimes([]); return; }
 
-    // Fetch profiles separately â the FK on tee_times.user_id points to auth.users,
+    // Fetch profiles separately — the FK on tee_times.user_id points to auth.users,
     // so PostgREST embedded joins to profiles don't work; we stitch them manually.
     const userIds = [...new Set(times.map(t => t.user_id))];
     const { data: profiles } = await sb
@@ -409,12 +410,12 @@
         <div class="tt-course-badge"><div class="tt-course">${esc(t.course)}</div></div>
       </div>
       <div class="tt-body">
-        <div class="tt-datetime">${fmtDate}${fmtTime ? ' Â· ' + fmtTime : ''}</div>
+        <div class="tt-datetime">${fmtDate}${fmtTime ? ' · ' + fmtTime : ''}</div>
         <div class="tt-host-row">
           <div class="tt-host-av" style="background:${col}">${hostInitials}</div>
           <div class="tt-host-info">
             <div class="tt-host-name">${esc(hostName)}</div>
-            <div class="tt-host-hcp">${p.handicap ? 'HCP ' + p.handicap : 'Handicap not listed'}${p.has_car ? ' Â· Has car' : ''}</div>
+            <div class="tt-host-hcp">${p.handicap ? 'HCP ' + p.handicap : 'Handicap not listed'}${p.has_car ? ' · Has car' : ''}</div>
           </div>
         </div>
         <div class="tt-tags">
@@ -426,7 +427,7 @@
         ${isOwner ? `
         <div class="tt-actions" style="margin-bottom:10px;">
           <div class="spots-ctrl">
-            <button class="spots-btn" data-tt="${t.id}" data-delta="-1" onclick="updateSpots(this)" ${spotsLeft <= 0 ? 'disabled' : ''}>â</button>
+            <button class="spots-btn" data-tt="${t.id}" data-delta="-1" onclick="updateSpots(this)" ${spotsLeft <= 0 ? 'disabled' : ''}>−</button>
             <span class="spots-count" id="spots-${t.id}">${spotsTxt}</span>
             <button class="spots-btn" data-tt="${t.id}" data-delta="1" onclick="updateSpots(this)" ${spotsLeft >= 4 ? 'disabled' : ''}>+</button>
           </div>
@@ -441,7 +442,7 @@
         <div class="contact-reveal" id="cr-${t.id}">
           ${p.phone ? `<div class="contact-row"><span class="contact-label">Phone</span><span class="contact-val"><a href="tel:${p.phone}">${esc(p.phone)}</a></span></div>` : ''}
           ${(p.email||currentUser.email) ? `<div class="contact-row"><span class="contact-label">Email</span><span class="contact-val"><a href="mailto:${p.email||''}">${esc(p.email||'')}</a></span></div>` : ''}
-          ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file â reach out via the member directory.</span></div>` : ''}
+          ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file — reach out via the member directory.</span></div>` : ''}
         </div>
       </div>
     </div>`;
@@ -471,15 +472,15 @@
     const course    = btn.dataset.course;
     const date      = btn.dataset.date;
     btn.disabled = true; btn.textContent = 'Sending...';
-    const { error } = await sb.from*'join_requests').insert({
+    const { error } = await sb.from('join_requests').insert({
       tee_time_id: teeTimeId,
       user_id:     currentUser.id
     });
     if (error && !error.message.includes('duplicate')) {
-      btn.disabled = false; btn.textContent = "I'm in!"; showToast('Something went wrong â try again.'); return;
+      btn.disabled = false; btn.textContent = "I'm in!"; showToast('Something went wrong — try again.'); return;
     }
     btn.textContent = 'Request sent!';
-    showToast(`Your interest in ${course} on ${date} has been noted â reach out to ${hostName} directly to confirm.`, true);
+    showToast(`Your interest in ${course} on ${date} has been noted — reach out to ${hostName} directly to confirm.`, true);
   }
 
   async function deleteTeeTime(btn) {
@@ -489,7 +490,7 @@
     if (!error) { document.getElementById(`card-${id}`)?.remove(); showToast('Tee time deleted.'); }
   }
 
-  // ââ MEMBERS âââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── MEMBERS ───────────────────────────────────────────────
   async function loadMembers() {
     const { data } = await sb.from('profiles').select('*').order('first_name');
     allMembers = data || [];
@@ -537,7 +538,7 @@
     renderMembers(filtered);
   }
 
-  // ââ POST TEE TIME âââââââââââââââââââââââââââââââââââââââââ
+  // ── POST TEE TIME ─────────────────────────────────────────
   async function handlePost(e) {
     e.preventDefault();
     const btn = document.getElementById('post-btn');
@@ -561,7 +562,7 @@
     else { closePostModal(); document.getElementById('post-form').reset(); showToast('Tee time posted!', true); await loadTeeTimes(); }
   }
 
-  // ââ PROFILE EDIT ââââââââââââââââââââââââââââââââââââââââââ
+  // ── PROFILE EDIT ──────────────────────────────────────────
   function openProfileModal() {
     if (currentProfile) {
       document.getElementById('pr-first').value = currentProfile.first_name || '';
@@ -605,7 +606,7 @@
     btn.textContent = 'Save profile'; btn.disabled = false;
   }
 
-  // ââ REALTIME âââââââââââââââââââââââââââââââââââââââââââââ
+  // ── REALTIME ─────────────────────────────────────────────
   function subscribeRealtime() {
     realtimeChannel = sb.channel('tee-times-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tee_times' }, async () => {
@@ -614,13 +615,13 @@
       .subscribe();
   }
 
-  // ââ SIGN OUT ââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── SIGN OUT ──────────────────────────────────────────────
   async function signOut() {
     await sb.auth.signOut();
     window.location.href = 'index.html';
   }
 
-  // ââ VIEW SWITCHING ââââââââââââââââââââââââââââââââââââââââ
+  // ── VIEW SWITCHING ────────────────────────────────────────
   function showView(name, btn) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -628,13 +629,13 @@
     if (btn) btn.classList.add('active');
   }
 
-  // ââ MODAL HELPERS âââââââââââââââââââââââââââââââââââââââââ
+  // ── MODAL HELPERS ─────────────────────────────────────────
   function openPostModal()    { document.getElementById('post-modal').classList.add('open'); }
   function closePostModal()   { document.getElementById('post-modal').classList.remove('open'); }
   function closeProfileModal(){ document.getElementById('profile-modal').classList.remove('open'); }
   function toggleDropdown()   { document.getElementById('user-dropdown').classList.toggle('open'); }
 
-  // ââ TOAST âââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── TOAST ─────────────────────────────────────────────────
   function showToast(msg, green = false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -642,7 +643,7 @@
     setTimeout(() => t.classList.remove('show'), 4000);
   }
 
-  // ââ UTILS âââââââââââââââââââââââââââââââââââââââââââââââââ
+  // ── UTILS ─────────────────────────────────────────────────
   function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fmt12(t) {
     if (!t) return '';
