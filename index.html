@@ -276,7 +276,8 @@
 
   window.addEventListener('DOMContentLoaded', async () => {
     const { data: { session } } = await sb.auth.getSession();
-    if (session) { window.location.href = 'board.html'; return; }
+    const signedOut = new URLSearchParams(window.location.search).get('signedout');
+    if (session && !signedOut) { window.location.href = 'board.html'; return; }
     loadStats();
   });
 
@@ -294,7 +295,7 @@
     } catch(e) { document.getElementById('hero-member-count').textContent = '60+'; }
   }
 
-  async function handleSignin(i) {
+  async function handleSignin(e) {
     e.preventDefault();
     const btn = document.getElementById('si-btn');
     const err = document.getElementById('signin-err');
