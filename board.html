@@ -55,6 +55,12 @@
     .tt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
     .tt-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.15s; }
     .tt-card:hover { border-color: var(--subtle); }
+    .tt-card.past { opacity: 0.6; filter: grayscale(0.7); }
+    .tt-card.past:hover { border-color: var(--border); }
+    .tt-card.past .tt-datetime { color: var(--muted); }
+    .tt-card.past .tt-tag-spots { background: var(--bg3); color: var(--muted); border-color: var(--border); }
+    .tt-past-banner { background: var(--bg3); color: var(--muted); font-size: 11px; font-weight: 600; text-align: center; padding: 6px 8px; border-bottom: 1px solid var(--border); letter-spacing: 0.5px; text-transform: uppercase; }
+    .tt-section-divider { grid-column: 1 / -1; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
     .tt-photo { height: 140px; background-size: cover; background-position: center; position: relative; }
     .tt-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%); }
     .tt-course-badge { position: absolute; bottom: 12px; left: 14px; right: 14px; }
@@ -161,7 +167,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:64px;width:auto;display:block;"></div>
+  <div class="nav-logo"><img src="./City_Links_Logo_CleanTransparent.png" alt="CityLinks NYC" style="height:96px;width:auto;display:block;"></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showView('tee-times', this)">Tee Times</button>
     <button class="nav-tab" onclick="showView('members', this)">Members</button>
@@ -296,6 +302,111 @@
     return PHOTOS[Math.abs(h) % PHOTOS.length];
   }
 
+  // ── COURSE-SPECIFIC IMAGES ───────────────────────────────
+  // Curated NYC-area courses → Wikipedia article title (we'll pull the lead image).
+  // Each entry's `keywords` must ALL appear (case-insensitive) in the typed course name.
+  // Order matters — more specific entries (e.g. "Bethpage Black") must come BEFORE
+  // generic ones (e.g. "Bethpage").
+  // To override Wikipedia's image for any course, add a URL to COURSE_IMG_OVERRIDES below.
+  const COURSE_LOOKUP = [
+    // Bethpage State Park — multiple courses
+    { keywords: ['bethpage', 'black'],   wiki: 'Bethpage Black Course' },
+    { keywords: ['bethpage', 'red'],     wiki: 'Bethpage State Park' },
+    { keywords: ['bethpage', 'blue'],    wiki: 'Bethpage State Park' },
+    { keywords: ['bethpage', 'green'],   wiki: 'Bethpage State Park' },
+    { keywords: ['bethpage', 'yellow'],  wiki: 'Bethpage State Park' },
+    { keywords: ['bethpage'],            wiki: 'Bethpage State Park' },
+    // NYC city courses
+    { keywords: ['van', 'cortlandt'],    wiki: 'Van Cortlandt Park' },
+    { keywords: ['split', 'rock'],       wiki: 'Pelham Bay Park' },
+    { keywords: ['pelham'],              wiki: 'Pelham Bay Park' },
+    { keywords: ['mosholu'],             wiki: 'Mosholu Golf Course' },
+    { keywords: ['dyker'],               wiki: 'Dyker Beach Park' },
+    { keywords: ['marine', 'park'],      wiki: 'Marine Park, Brooklyn' },
+    { keywords: ['forest', 'park'],      wiki: 'Forest Park (Queens)' },
+    { keywords: ['kissena'],             wiki: 'Kissena Park' },
+    { keywords: ['clearview'],           wiki: 'Clearview Park Golf Course' },
+    { keywords: ['douglaston'],          wiki: 'Douglaston Golf Course' },
+    { keywords: ['silver', 'lake'],      wiki: 'Silver Lake Park (Staten Island)' },
+    { keywords: ['latourette'],          wiki: 'LaTourette Park' },
+    { keywords: ['south', 'shore'],      wiki: 'South Shore Golf Course (Staten Island)' },
+    // Trump Ferry Point (Bronx)
+    { keywords: ['trump', 'ferry'],      wiki: 'Trump Golf Links at Ferry Point' },
+    { keywords: ['ferry', 'point'],      wiki: 'Trump Golf Links at Ferry Point' },
+    // Long Island county courses
+    { keywords: ['eisenhower'],          wiki: 'Eisenhower Park' },
+    { keywords: ['bergen', 'point'],     wiki: 'Bergen Point Country Club' },
+    { keywords: ['sunken', 'meadow'],    wiki: 'Sunken Meadow State Park' },
+    { keywords: ['heckscher'],           wiki: 'Heckscher State Park' },
+    { keywords: ['montauk', 'downs'],    wiki: 'Montauk Downs State Park' },
+    { keywords: ['indian', 'island'],    wiki: 'Indian Island County Park' },
+    { keywords: ['lido'],                wiki: 'Lido Golf Club' },
+    { keywords: ['cantiague'],           wiki: 'Cantiague Park' },
+    // Westchester county courses
+    { keywords: ['saxon', 'woods'],      wiki: 'Saxon Woods Park' },
+    { keywords: ['sprain', 'lake'],      wiki: 'Sprain Lake Golf Course' },
+    { keywords: ['mohansic'],            wiki: 'Mohansic Golf Course' },
+    { keywords: ['dunwoodie'],           wiki: 'Dunwoodie Golf Course' },
+    { keywords: ['hudson', 'hills'],     wiki: 'Hudson Hills Golf Course' },
+    { keywords: ['maple', 'moor'],       wiki: 'Maple Moor Golf Course' },
+  ];
+
+  // Hard-coded URL overrides — paste a direct image URL here if Wikipedia's
+  // lead image isn't a good shot of the course. Key is the wiki title above.
+  const COURSE_IMG_OVERRIDES = {
+    // 'Bethpage Black Course': 'https://example.com/your-photo.jpg',
+  };
+
+  function lookupCuratedCourse(courseName) {
+    const norm = (courseName || '').toLowerCase();
+    if (!norm) return null;
+    for (const entry of COURSE_LOOKUP) {
+      if (entry.keywords.every(kw => norm.includes(kw))) return entry;
+    }
+    return null;
+  }
+
+  // Cache Wikipedia thumbnail lookups in localStorage so we only fetch once per course per browser.
+  const COURSE_IMG_CACHE_KEY = 'cl_course_imgs_v1';
+  let courseImgCache = {};
+  try { courseImgCache = JSON.parse(localStorage.getItem(COURSE_IMG_CACHE_KEY) || '{}'); } catch (e) {}
+  function saveCourseImgCache() {
+    try { localStorage.setItem(COURSE_IMG_CACHE_KEY, JSON.stringify(courseImgCache)); } catch (e) {}
+  }
+
+  async function fetchWikiThumb(title) {
+    if (Object.prototype.hasOwnProperty.call(courseImgCache, title)) return courseImgCache[title];
+    try {
+      const res = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title));
+      if (!res.ok) { courseImgCache[title] = null; saveCourseImgCache(); return null; }
+      const data = await res.json();
+      const url = (data.originalimage && data.originalimage.source)
+               || (data.thumbnail && data.thumbnail.source)
+               || null;
+      courseImgCache[title] = url;
+      saveCourseImgCache();
+      return url;
+    } catch (e) {
+      courseImgCache[title] = null;
+      saveCourseImgCache();
+      return null;
+    }
+  }
+
+  // Upgrade a card's hero image to a course-specific photo if we have one.
+  // Card already renders with the generic fallback, so any failure is silent.
+  async function enhanceCardPhoto(courseName, photoEl) {
+    const match = lookupCuratedCourse(courseName);
+    if (!match || !photoEl) return;
+    const override = COURSE_IMG_OVERRIDES[match.wiki];
+    const url = override || await fetchWikiThumb(match.wiki);
+    if (!url) return;
+    // Pre-load to avoid swapping in a broken image
+    const probe = new Image();
+    probe.onload = () => { photoEl.style.backgroundImage = `url('${url}')`; };
+    probe.src = url;
+  }
+
   const AVATAR_COLORS = ['#3d6e2e','#2e5060','#6e3d2e','#4e2e6e','#2e6e50','#6e5a2e','#2e3e6e','#5a2e4e'];
   function avatarColor(id) {
     let h = 0;
@@ -355,12 +466,29 @@
   }
 
   // ── TEE TIMES ─────────────────────────────────────────────
+  // A tee time is "past" once its date+time has elapsed (or end of day if no time).
+  function isPastTeeTime(t) {
+    const now = new Date();
+    if (t.time) {
+      // tt-time is HH:MM[:SS]
+      const dt = new Date(`${t.date}T${t.time.length === 5 ? t.time + ':00' : t.time}`);
+      return dt.getTime() < now.getTime();
+    }
+    // No time given → consider passed at end of that calendar day.
+    const endOfDay = new Date(`${t.date}T23:59:59`);
+    return endOfDay.getTime() < now.getTime();
+  }
+
   async function loadTeeTimes() {
-    const today = new Date().toISOString().split('T')[0];
+    // Show tee times from up to 14 days ago through the future.
+    // Older tee times remain in the database but are filtered out of the display.
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 14);
+    const cutoffStr = cutoff.toISOString().split('T')[0];
     const { data: times, error } = await sb
       .from('tee_times')
       .select('*')
-      .gte('date', today)
+      .gte('date', cutoffStr)
       .order('date', { ascending: true })
       .order('time', { ascending: true });
 
@@ -383,14 +511,42 @@
 
   function renderTeeTimes(times) {
     const grid = document.getElementById('tt-grid');
-    if (!times.length) {
+    // Split into upcoming and recently-past (within 14d) groups.
+    // Past tee times are still shown but greyed out and non-interactive.
+    const upcoming = [];
+    const past = [];
+    times.forEach(t => (isPastTeeTime(t) ? past : upcoming).push(t));
+    // Sort past most-recent-first so freshly-elapsed games appear first below the divider.
+    past.sort((a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || '')));
+
+    if (!upcoming.length && !past.length) {
       grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><h3>No tee times posted yet</h3><p>Be the first to post a game this week!</p><button class="btn-post" onclick="openPostModal()" style="margin-top:8px">Post a tee time</button></div>`;
       return;
     }
-    grid.innerHTML = times.map(t => buildCard(t)).join('');
+
+    let html = '';
+    if (upcoming.length) {
+      html += upcoming.map(t => buildCard(t, false)).join('');
+    } else {
+      html += `<div class="empty" style="grid-column:1/-1;padding:32px"><h3>No upcoming tee times</h3><p>Post a game to get something on the board.</p></div>`;
+    }
+    if (past.length) {
+      html += `<div class="tt-section-divider">Recently played</div>`;
+      html += past.map(t => buildCard(t, true)).join('');
+    }
+    grid.innerHTML = html;
+
+    // After the cards are in the DOM, try to upgrade each tile's hero image
+    // to a course-specific photo (curated NYC list → Wikipedia thumbnail).
+    // Failures are silent — the generic fallback already painted.
+    times.forEach(t => {
+      const card = document.getElementById('card-' + t.id);
+      const photoEl = card && card.querySelector('.tt-photo');
+      if (photoEl) enhanceCardPhoto(t.course, photoEl);
+    });
   }
 
-  function buildCard(t) {
+  function buildCard(t, isPast = false) {
     const p       = t.profile || {};
     const isOwner = currentUser && t.user_id === currentUser.id;
     const hostInitials = ((p.first_name||'')[0]||'') + ((p.last_name||'')[0]||'');
@@ -403,8 +559,13 @@
     const spotsLeft = t.spots ?? 0;
     const spotsTxt = spotsLeft === 0 ? 'Full' : `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} open`;
 
+    // For past tee times: grey out, suppress engagement (spots ctrl, "I'm in", contact reveal).
+    // Owners can still delete their own past tee times.
+    const cardClass = isPast ? 'tt-card past' : 'tt-card';
+
     return `
-    <div class="tt-card" id="card-${t.id}">
+    <div class="${cardClass}" id="card-${t.id}">
+      ${isPast ? `<div class="tt-past-banner">Tee time has passed</div>` : ''}
       <div class="tt-photo" style="background-image:url('${photo}')">
         <div class="tt-photo-overlay"></div>
         <div class="tt-course-badge"><div class="tt-course">${esc(t.course)}</div></div>
@@ -424,15 +585,20 @@
           ${t.greens_fees  ? `<span class="tt-tag tt-tag-fees">${esc(t.greens_fees)}</span>` : ''}
         </div>
         ${t.notes || t.looking_for ? `<div class="tt-notes">${esc(t.notes || t.looking_for)}</div>` : ''}
-        ${isOwner ? `
+        ${isOwner && !isPast ? `
         <div class="tt-actions" style="margin-bottom:10px;">
           <div class="spots-ctrl">
             <button class="spots-btn" data-tt="${t.id}" data-delta="-1" onclick="updateSpots(this)" ${spotsLeft <= 0 ? 'disabled' : ''}>−</button>
             <span class="spots-count" id="spots-${t.id}">${spotsTxt}</span>
-            <button class="spots-btn" data-tt="${t.id}" data-delta="1" onclick="updateSpots(this)" ${spotsLeft >= 4 ? 'disabled' : ''}>+</button>
+            <button class="spots-btn" data-tt="${t.id}" data-delta="1" onclick="updateSpots(this)" ${spotsLeft >= 3 ? 'disabled' : ''}>+</button>
           </div>
           <button style="background:var(--bg3);color:#e88;border:1px solid #3a1212;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:600;" data-tt="${t.id}" onclick="deleteTeeTime(this)">Delete</button>
         </div>` : ''}
+        ${isOwner && isPast ? `
+        <div class="tt-actions" style="margin-bottom:10px;justify-content:flex-end;">
+          <button style="background:var(--bg3);color:#e88;border:1px solid #3a1212;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:600;" data-tt="${t.id}" onclick="deleteTeeTime(this)">Delete</button>
+        </div>` : ''}
+        ${!isPast ? `
         <div class="tt-actions">
           <button class="btn-contact" data-name="${esc(p.first_name||'Host')}" onclick="toggleContact(this)">Contact ${esc(p.first_name||'Host')}</button>
           ${!isOwner ? `<button class="btn-im-in" data-tt="${t.id}" data-host="${esc(hostName)}" data-course="${esc(t.course)}" data-date="${fmtDate}" onclick="imIn(this)" ${spotsLeft <= 0 ? 'disabled' : ''}>
@@ -443,7 +609,7 @@
           ${p.phone ? `<div class="contact-row"><span class="contact-label">Phone</span><span class="contact-val"><a href="tel:${p.phone}">${esc(p.phone)}</a></span></div>` : ''}
           ${(p.email||currentUser.email) ? `<div class="contact-row"><span class="contact-label">Email</span><span class="contact-val"><a href="mailto:${p.email||''}">${esc(p.email||'')}</a></span></div>` : ''}
           ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file — reach out via the member directory.</span></div>` : ''}
-        </div>
+        </div>` : ''}
       </div>
     </div>`;
   }
@@ -461,7 +627,8 @@
     const delta = parseInt(btn.dataset.delta, 10);
     const { data: curr } = await sb.from('tee_times').select('spots').eq('id', id).single();
     if (!curr) return;
-    const newVal = Math.max(0, Math.min(4, (curr.spots ?? 0) + delta));
+    // Cap at 3 — a tee time can host at most 3 additional players besides the host (foursome max).
+    const newVal = Math.max(0, Math.min(3, (curr.spots ?? 0) + delta));
     const { error } = await sb.from('tee_times').update({ spots: newVal }).eq('id', id);
     if (!error) await loadTeeTimes();
   }
@@ -545,7 +712,9 @@
     const err = document.getElementById('post-err');
     btn.textContent = 'Posting...'; btn.disabled = true; err.style.display = 'none';
 
-    const spots = parseInt(document.getElementById('p-spots').value) || 1;
+    // Clamp spots to 1–3 in case the HTML max attribute was bypassed.
+    const rawSpots = parseInt(document.getElementById('p-spots').value) || 1;
+    const spots = Math.max(1, Math.min(3, rawSpots));
     const { error } = await sb.from('tee_times').insert({
       user_id:      currentUser.id,
       course:       document.getElementById('p-course').value.trim(),
