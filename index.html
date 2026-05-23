@@ -39,20 +39,31 @@
 
     /* HERO */
     .hero-wrap { background: var(--bg2); border-bottom: 1px solid var(--border); }
-    .hero { max-width: 1100px; margin: 0 auto; padding: 80px 48px 68px; }
+    .hero { max-width: 1100px; margin: 0 auto; padding: 80px 48px 68px; display: grid; grid-template-columns: 1fr 420px; gap: 64px; align-items: center; }
+    .hero-text { }
     .live-badge { display: inline-flex; align-items: center; gap: 8px; background: #162a12; border: 1px solid #2a4a22; border-radius: 20px; padding: 6px 14px; margin-bottom: 28px; }
     .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
     .live-text { color: var(--green); font-size: 12px; font-weight: 600; }
-    .hero h1 { font-size: 58px; font-weight: 800; line-height: 1.05; margin-bottom: 18px; letter-spacing: -1.5px; }
+    .hero h1 { font-size: 54px; font-weight: 800; line-height: 1.05; margin-bottom: 18px; letter-spacing: -1.5px; }
     .hero h1 em { color: var(--green); font-style: normal; }
-    .hero p { color: var(--muted); font-size: 17px; line-height: 1.7; max-width: 500px; margin-bottom: 36px; }
+    .hero p { color: var(--muted); font-size: 17px; line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
     .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
     .btn-primary { background: var(--green); color: var(--bg); border: none; border-radius: 28px; font-size: 14px; font-weight: 700; cursor: pointer; padding: 14px 30px; font-family: inherit; transition: background 0.15s; }
     .btn-primary:hover { background: #a0dc88; }
     .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 28px; font-size: 14px; font-weight: 500; cursor: pointer; padding: 14px 24px; font-family: inherit; transition: border-color 0.15s; }
     .btn-secondary:hover { border-color: var(--subtle); }
     .members-preview { display: flex; align-items: center; margin-top: 36px; }
+    /* HERO PHOTO */
+    .hero-photo-wrap { position: relative; }
+    .hero-photo { width: 100%; aspect-ratio: 4/5; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 32px 80px rgba(0,0,0,0.5); position: relative; }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-photo-placeholder { width: 100%; height: 100%; background: linear-gradient(145deg, #0e1f10 0%, #1a3520 40%, #0f2318 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    .hero-photo-placeholder svg { opacity: 0.3; }
+    .hero-photo-placeholder span { font-size: 12px; color: var(--muted); opacity: 0.6; }
+    .hero-photo-badge { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(11,15,12,0.85); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; text-align: center; white-space: nowrap; }
+    .hero-photo-badge-line1 { font-size: 13px; font-weight: 700; color: var(--text); }
+    .hero-photo-badge-line2 { font-size: 11px; color: var(--green); margin-top: 2px; }
     .avatar-stack { display: flex; }
     .av { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; margin-left: -10px; }
     .av:first-child { margin-left: 0; }
@@ -121,6 +132,10 @@
     footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 28px 48px; text-align: center; font-size: 12px; color: var(--muted); }
 
     /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 40px; }
+      .hero-photo-wrap { display: none; }
+    }
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
       .hero { padding: 48px 24px 40px; }
@@ -139,7 +154,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo"><img src="./logo.jpg" alt="CityLinks NYC" style="height:64px;width:auto;display:block;"></div>
+  <div class="nav-logo"><img src="/City_Links_Logo_CleanTransparent.png" alt="CityLinks NYC" style="height:120px;width:auto;display:block;"></div>
   <div class="nav-actions">
     <button class="btn-ghost-nav" onclick="scrollToSignin()">Sign in</button>
     <button class="btn-cta-nav" onclick="scrollToJoin()">Join free</button>
@@ -149,25 +164,36 @@
 <!-- HERO -->
 <div class="hero-wrap">
   <div class="hero">
-    <div class="live-badge">
-      <div class="live-dot"></div>
-      <span class="live-text" id="live-label">Active this week</span>
-    </div>
-    <h1>Play more golf.<br><em>Meet more golfers.</em></h1>
-    <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew — all in one place.</p>
-    <div class="hero-btns">
-      <button class="btn-primary" onclick="scrollToJoin()">Join the community — it's free</button>
-      <button class="btn-secondary" onclick="scrollToSignin()">Already a member</button>
-    </div>
-    <div class="members-preview">
-      <div class="avatar-stack">
-        <div class="av av1">RK</div>
-        <div class="av av2">MT</div>
-        <div class="av av3">JR</div>
-        <div class="av av4">DL</div>
-        <div class="av av5">SB</div>
+    <div class="hero-text">
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <span class="live-text" id="live-label">Active this week</span>
       </div>
-      <div class="members-text"><strong id="hero-member-count">Loading...</strong> NYC golfers and counting</div>
+      <h1>Play more golf.<br><em>Meet more golfers.</em></h1>
+      <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew — all in one place.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="scrollToJoin()">Join the community — it's free</button>
+        <button class="btn-secondary" onclick="scrollToSignin()">Already a member</button>
+      </div>
+      <div class="members-preview">
+        <div class="avatar-stack">
+          <div class="av av1">RK</div>
+          <div class="av av2">MT</div>
+          <div class="av av3">JR</div>
+          <div class="av av4">DL</div>
+          <div class="av av5">SB</div>
+        </div>
+        <div class="members-text"><strong id="hero-member-count">Loading...</strong> NYC golfers and counting</div>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <img src="/hero-photo.jpg" alt="Golf course with NYC skyline backdrop" style="object-position: center 30%;" />
+        <div class="hero-photo-badge">
+          <div class="hero-photo-badge-line1">NYC Golf Community</div>
+          <div class="hero-photo-badge-line2">Find your next game →</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -231,9 +257,9 @@
       <p>Sign in to see all tee times, connect with members, and post your own games.</p>
       <div class="msg msg-error" id="signin-err"></div>
       <div class="msg msg-success" id="signin-ok"></div>
-      <form onsubmit="handleSignin(event)">
-        <div class="form-group"><label>Email</label><input class="form-input" type="email" id="si-email" placeholder="your@email.com" required></div>
-        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="si-pass" placeholder="••••••••" required></div>
+      <form id="signin-form" name="signin" onsubmit="handleSignin(event)">
+        <div class="form-group"><label for="si-email">Email</label><input class="form-input" type="email" id="si-email" name="email" autocomplete="username" placeholder="your@email.com" required></div>
+        <div class="form-group"><label for="si-pass">Password</label><input class="form-input" type="password" id="si-pass" name="current-password" autocomplete="current-password" placeholder="••••••••" required></div>
         <button class="btn-full btn-full-green" type="submit" id="si-btn">Sign in</button>
       </form>
       <div class="auth-footer"><a href="#" onclick="forgotPassword(event)">Forgot password?</a> &nbsp;·&nbsp; New here? <a href="#" onclick="scrollToJoin()">Join free</a></div>
@@ -251,13 +277,13 @@
       </ul>
       <div class="msg msg-error" id="su-err"></div>
       <div class="msg msg-success" id="su-ok"></div>
-      <form onsubmit="handleSignup(event)">
+      <form id="signup-form" name="signup" onsubmit="handleSignup(event)">
         <div class="form-row">
-          <div class="form-group"><label>First name</label><input class="form-input" type="text" id="su-first" placeholder="Ross" required></div>
-          <div class="form-group"><label>Last name</label><input class="form-input" type="text" id="su-last" placeholder="Klein" required></div>
+          <div class="form-group"><label for="su-first">First name</label><input class="form-input" type="text" id="su-first" name="given-name" autocomplete="given-name" placeholder="Ross" required></div>
+          <div class="form-group"><label for="su-last">Last name</label><input class="form-input" type="text" id="su-last" name="family-name" autocomplete="family-name" placeholder="Klein" required></div>
         </div>
-        <div class="form-group"><label>Email</label><input class="form-input" type="email" id="su-email" placeholder="your@email.com" required></div>
-        <div class="form-group"><label>Password</label><input class="form-input" type="password" id="su-pass" placeholder="At least 8 characters" minlength="8" required></div>
+        <div class="form-group"><label for="su-email">Email</label><input class="form-input" type="email" id="su-email" name="email" autocomplete="username" placeholder="your@email.com" required></div>
+        <div class="form-group"><label for="su-pass">Password</label><input class="form-input" type="password" id="su-pass" name="new-password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required></div>
         <button class="btn-full btn-full-outline" type="submit" id="su-btn">Create my free account</button>
       </form>
       <div class="auth-footer">Already a member? <a href="#" onclick="scrollToSignin()">Sign in</a></div>

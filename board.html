@@ -130,6 +130,9 @@
     .form-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; color: var(--text); font-size: 14px; outline: none; transition: border-color 0.15s; }
     .form-input:focus { border-color: var(--green); }
     .form-input::placeholder { color: var(--subtle); }
+    .input-prefix { position: relative; }
+    .input-prefix > span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
+    .input-prefix > input { padding-left: 26px; }
     .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-check { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); cursor: pointer; }
     .form-check input { width: 16px; height: 16px; accent-color: var(--green); }
@@ -167,7 +170,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo"><img src="./City_Links_Logo_CleanTransparent.png" alt="CityLinks NYC" style="height:96px;width:auto;display:block;"></div>
+  <div class="nav-logo"><img src="/City_Links_Logo_CleanTransparent.png" alt="CityLinks NYC" style="height:120px;width:auto;display:block;"></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showView('tee-times', this)">Tee Times</button>
     <button class="nav-tab" onclick="showView('members', this)">Members</button>
@@ -230,11 +233,10 @@
       </div>
       <div class="form-row-2">
         <div class="form-group"><label class="form-label">Spots available</label><input class="form-input" type="number" id="p-spots" min="1" max="3" value="1" required></div>
-        <div class="form-group"><label class="form-label">Greens fees (approx)</label><input class="form-input" id="p-fees" placeholder="e.g. $60 walk"></div>
+        <div class="form-group"><label class="form-label">Greens fees (approx)</label><div class="input-prefix"><span>$</span><input class="form-input" id="p-fees" placeholder="e.g. 60 walk"></div></div>
       </div>
       <div class="form-group"><label class="form-label">Leaving from</label><input class="form-input" id="p-leaving" placeholder="e.g. Upper East Side, UES"></div>
       <div class="form-group"><label class="form-label">Looking for</label><input class="form-input" id="p-looking" placeholder="e.g. Anyone welcome, have a car to offer"></div>
-      <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-input" id="p-notes" rows="2" placeholder="Anything else people should know..."></textarea></div>
       <button class="btn-submit" type="submit" id="post-btn">Post tee time</button>
     </form>
   </div>
@@ -302,60 +304,87 @@
     return PHOTOS[Math.abs(h) % PHOTOS.length];
   }
 
-  // ── COURSE-SPECIFIC IMAGES ───────────────────────────────
-  // Curated NYC-area courses → Wikipedia article title (we'll pull the lead image).
-  // Each entry's `keywords` must ALL appear (case-insensitive) in the typed course name.
+  // ── COURSE-SPECIFIC IMAGES & CANONICAL NAMES ─────────────
+  // Each entry:
+  //   keywords    — must ALL appear (case-insensitive) in the typed course name
+  //   displayName — official name shown on the tile (normalizes typos / shorthand)
+  //   image       — direct URL from the course's website (wins over wiki)
+  //   wiki        — Wikipedia article title used as a fallback when no image
   // Order matters — more specific entries (e.g. "Bethpage Black") must come BEFORE
   // generic ones (e.g. "Bethpage").
-  // To override Wikipedia's image for any course, add a URL to COURSE_IMG_OVERRIDES below.
-  const COURSE_LOOKUP = [
-    // Bethpage State Park — multiple courses
-    { keywords: ['bethpage', 'black'],   wiki: 'Bethpage Black Course' },
-    { keywords: ['bethpage', 'red'],     wiki: 'Bethpage State Park' },
-    { keywords: ['bethpage', 'blue'],    wiki: 'Bethpage State Park' },
-    { keywords: ['bethpage', 'green'],   wiki: 'Bethpage State Park' },
-    { keywords: ['bethpage', 'yellow'],  wiki: 'Bethpage State Park' },
-    { keywords: ['bethpage'],            wiki: 'Bethpage State Park' },
-    // NYC city courses
-    { keywords: ['van', 'cortlandt'],    wiki: 'Van Cortlandt Park' },
-    { keywords: ['split', 'rock'],       wiki: 'Pelham Bay Park' },
-    { keywords: ['pelham'],              wiki: 'Pelham Bay Park' },
-    { keywords: ['mosholu'],             wiki: 'Mosholu Golf Course' },
-    { keywords: ['dyker'],               wiki: 'Dyker Beach Park' },
-    { keywords: ['marine', 'park'],      wiki: 'Marine Park, Brooklyn' },
-    { keywords: ['forest', 'park'],      wiki: 'Forest Park (Queens)' },
-    { keywords: ['kissena'],             wiki: 'Kissena Park' },
-    { keywords: ['clearview'],           wiki: 'Clearview Park Golf Course' },
-    { keywords: ['douglaston'],          wiki: 'Douglaston Golf Course' },
-    { keywords: ['silver', 'lake'],      wiki: 'Silver Lake Park (Staten Island)' },
-    { keywords: ['latourette'],          wiki: 'LaTourette Park' },
-    { keywords: ['south', 'shore'],      wiki: 'South Shore Golf Course (Staten Island)' },
-    // Trump Ferry Point (Bronx)
-    { keywords: ['trump', 'ferry'],      wiki: 'Trump Golf Links at Ferry Point' },
-    { keywords: ['ferry', 'point'],      wiki: 'Trump Golf Links at Ferry Point' },
-    // Long Island county courses
-    { keywords: ['eisenhower'],          wiki: 'Eisenhower Park' },
-    { keywords: ['bergen', 'point'],     wiki: 'Bergen Point Country Club' },
-    { keywords: ['sunken', 'meadow'],    wiki: 'Sunken Meadow State Park' },
-    { keywords: ['heckscher'],           wiki: 'Heckscher State Park' },
-    { keywords: ['montauk', 'downs'],    wiki: 'Montauk Downs State Park' },
-    { keywords: ['indian', 'island'],    wiki: 'Indian Island County Park' },
-    { keywords: ['lido'],                wiki: 'Lido Golf Club' },
-    { keywords: ['cantiague'],           wiki: 'Cantiague Park' },
-    // Westchester county courses
-    { keywords: ['saxon', 'woods'],      wiki: 'Saxon Woods Park' },
-    { keywords: ['sprain', 'lake'],      wiki: 'Sprain Lake Golf Course' },
-    { keywords: ['mohansic'],            wiki: 'Mohansic Golf Course' },
-    { keywords: ['dunwoodie'],           wiki: 'Dunwoodie Golf Course' },
-    { keywords: ['hudson', 'hills'],     wiki: 'Hudson Hills Golf Course' },
-    { keywords: ['maple', 'moor'],       wiki: 'Maple Moor Golf Course' },
-  ];
+  const BETHPAGE_IMG    = 'https://www.bethpagegolfcourse.com/wp-content/uploads/2018/09/bethapge-sand-2.jpg';
+  const FERRY_POINT_IMG = 'https://casinos.ballys.com/golf-links-ferry-point/files/7658/DJI_0611_20240125145152.jpg';
+  const PELHAM_IMG      = 'https://www.pelhamsplitrock.com/wp-content/uploads/sites/30/2025/08/Pelham-Bay-Split-Rock-Golf-Course-Events-6-e1755311070496-1024x321.jpg';
 
-  // Hard-coded URL overrides — paste a direct image URL here if Wikipedia's
-  // lead image isn't a good shot of the course. Key is the wiki title above.
-  const COURSE_IMG_OVERRIDES = {
-    // 'Bethpage Black Course': 'https://example.com/your-photo.jpg',
-  };
+  const COURSE_LOOKUP = [
+    // Bethpage State Park — all five courses share one hero shot
+    { keywords: ['bethpage', 'black'],   displayName: 'Bethpage Black',  image: BETHPAGE_IMG },
+    { keywords: ['bethpage', 'red'],     displayName: 'Bethpage Red',    image: BETHPAGE_IMG },
+    { keywords: ['bethpage', 'blue'],    displayName: 'Bethpage Blue',   image: BETHPAGE_IMG },
+    { keywords: ['bethpage', 'green'],   displayName: 'Bethpage Green',  image: BETHPAGE_IMG },
+    { keywords: ['bethpage', 'yellow'],  displayName: 'Bethpage Yellow', image: BETHPAGE_IMG },
+    { keywords: ['bethpage'],            displayName: 'Bethpage State Park', image: BETHPAGE_IMG },
+
+    // NYC city courses (GolfNYC operates Van Cortlandt, Queens, Staten Island)
+    // Note: 'cortland' matches both "cortlandt" and the common "cortland" typo
+    { keywords: ['cortland'],            displayName: 'Van Cortlandt',  image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250527154002_0117_D.jpg' },
+    { keywords: ['clearview'],           displayName: 'Clearview Park', image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602090342_0320_D.jpg' },
+    { keywords: ['douglaston'],          displayName: 'Douglaston',     image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602065620_0078_D.jpg' },
+    { keywords: ['forest', 'park'],      displayName: 'Forest Park',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601183219_0717_D.jpg' },
+    { keywords: ['kissena'],             displayName: 'Kissena Park',   image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DSC_1347.jpg' },
+    { keywords: ['la', 'tourette'],      displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601070829_0266_D.jpg' },
+    { keywords: ['latourette'],          displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601070829_0266_D.jpg' },
+    { keywords: ['silver', 'lake'],      displayName: 'Silver Lake',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601090037_0466_D.jpg' },
+    { keywords: ['south', 'shore'],      displayName: 'South Shore',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250531183229_0919_D.jpg' },
+
+    // Pelham/Split Rock, Mosholu, Dyker, Marine Park
+    { keywords: ['split', 'rock'],       displayName: 'Split Rock',          image: PELHAM_IMG },
+    { keywords: ['pelham'],              displayName: 'Pelham Bay',          image: PELHAM_IMG },
+    { keywords: ['mosholu'],             displayName: 'Mosholu',             image: 'https://www.mosholugolf.com/wp-content/uploads/sites/7832/2025/01/DJI_20241107035619_0021_D-HDR.jpg' },
+    { keywords: ['dyker'],               displayName: 'Dyker Beach',         image: 'https://www.dykerbeachgc.com/wp-content/uploads/sites/12/2020/04/amenity-photo-1-e1755805167453-1024x312.jpg' },
+    { keywords: ['marine', 'park'],      displayName: 'Marine Park',         wiki:  'Marine Park, Brooklyn' },
+
+    // Bronx — Bally's Ferry Point (formerly Trump)
+    { keywords: ['trump', 'ferry'],      displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
+    { keywords: ['ferry', 'point'],      displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
+    { keywords: ['ballys', 'ferry'],     displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
+
+    // Long Island
+    { keywords: ['harbor', 'links'],     displayName: 'Harbor Links',                  image: 'https://www.harborlinks.com/wp-content/uploads/2025/01/304182599_533453718784016_3160601528738936402_n-1400x975.jpg' },
+    { keywords: ['middle', 'bay'],       displayName: 'The Golf Club at Middle Bay' },
+    { keywords: ['lawrence', 'yacht'],   displayName: 'Lawrence Yacht & Country Club', image: 'https://www.lycc.cc/wp-content/uploads/sites/8830/2024/01/Lawrence-Yacht-and-Country-Club-Flyover.jpg' },
+    { keywords: ['eisenhower'],          displayName: 'Eisenhower Park',         wiki: 'Eisenhower Park' },
+    { keywords: ['bergen', 'point'],     displayName: 'Bergen Point',            wiki: 'Bergen Point Country Club' },
+    { keywords: ['sunken', 'meadow'],    displayName: 'Sunken Meadow',           wiki: 'Sunken Meadow State Park' },
+    { keywords: ['heckscher'],           displayName: 'Heckscher State Park',    wiki: 'Heckscher State Park' },
+    { keywords: ['montauk', 'downs'],    displayName: 'Montauk Downs',           wiki: 'Montauk Downs State Park' },
+    { keywords: ['indian', 'island'],    displayName: 'Indian Island',           wiki: 'Indian Island County Park' },
+    { keywords: ['lido'],                displayName: 'Lido Golf Club',          wiki: 'Lido Golf Club' },
+    { keywords: ['cantiague'],           displayName: 'Cantiague Park',          wiki: 'Cantiague Park' },
+
+    // Westchester / Hudson Valley
+    { keywords: ['pound', 'ridge'],      displayName: 'Pound Ridge Golf Club' },
+    { keywords: ['union', 'vale'],       displayName: 'The Links at Union Vale' },
+    { keywords: ['mansion', 'ridge'],    displayName: 'The Golf Club at Mansion Ridge' },
+    { keywords: ['saxon', 'woods'],      displayName: 'Saxon Woods',  wiki: 'Saxon Woods Park' },
+    { keywords: ['sprain', 'lake'],      displayName: 'Sprain Lake',  wiki: 'Sprain Lake Golf Course' },
+    { keywords: ['mohansic'],            displayName: 'Mohansic',     wiki: 'Mohansic Golf Course' },
+    { keywords: ['dunwoodie'],           displayName: 'Dunwoodie',    wiki: 'Dunwoodie Golf Course' },
+    { keywords: ['hudson', 'hills'],     displayName: 'Hudson Hills', wiki: 'Hudson Hills Golf Course' },
+    { keywords: ['maple', 'moor'],       displayName: 'Maple Moor',   wiki: 'Maple Moor Golf Course' },
+
+    // Connecticut
+    { keywords: ['great', 'river'],      displayName: 'Great River Golf Club' },
+    { keywords: ['yale'],                displayName: 'Yale Golf Course', wiki: 'Yale Golf Course' },
+
+    // New Jersey
+    { keywords: ['skyway'],              displayName: 'Skyway Golf Course',     image: 'https://skywaygolfcourse.com/wp-content/uploads/sites/4/2021/02/unspecified6.jpg' },
+    { keywords: ['neshanic'],            displayName: 'Neshanic Valley',        image: 'https://www.neshanicvalleygolf.com/wp-content/uploads/sites/893/2015/04/slider1.jpg' },
+    { keywords: ['rock', 'spring'],      displayName: 'Rock Spring Golf Club' },
+    { keywords: ['knoll'],               displayName: 'Knoll Country Club' },
+    { keywords: ['architects'],          displayName: 'The Architects Golf Club' },
+    { keywords: ['ballyowen'],           displayName: 'Ballyowen Golf Club' },
+  ];
 
   function lookupCuratedCourse(courseName) {
     const norm = (courseName || '').toLowerCase();
@@ -364,6 +393,13 @@
       if (entry.keywords.every(kw => norm.includes(kw))) return entry;
     }
     return null;
+  }
+
+  // Normalize a typed course name to the canonical/official display name.
+  // Falls back to whatever the user typed if we don't recognize it.
+  function courseDisplayName(courseName) {
+    const match = lookupCuratedCourse(courseName);
+    return (match && match.displayName) ? match.displayName : (courseName || '');
   }
 
   // Cache Wikipedia thumbnail lookups in localStorage so we only fetch once per course per browser.
@@ -395,11 +431,12 @@
 
   // Upgrade a card's hero image to a course-specific photo if we have one.
   // Card already renders with the generic fallback, so any failure is silent.
+  // Resolution order: direct `image` URL → Wikipedia thumbnail → nothing (keep fallback).
   async function enhanceCardPhoto(courseName, photoEl) {
     const match = lookupCuratedCourse(courseName);
     if (!match || !photoEl) return;
-    const override = COURSE_IMG_OVERRIDES[match.wiki];
-    const url = override || await fetchWikiThumb(match.wiki);
+    let url = match.image || null;
+    if (!url && match.wiki) url = await fetchWikiThumb(match.wiki);
     if (!url) return;
     // Pre-load to avoid swapping in a broken image
     const probe = new Image();
@@ -568,7 +605,7 @@
       ${isPast ? `<div class="tt-past-banner">Tee time has passed</div>` : ''}
       <div class="tt-photo" style="background-image:url('${photo}')">
         <div class="tt-photo-overlay"></div>
-        <div class="tt-course-badge"><div class="tt-course">${esc(t.course)}</div></div>
+        <div class="tt-course-badge"><div class="tt-course">${esc(courseDisplayName(t.course))}</div></div>
       </div>
       <div class="tt-body">
         <div class="tt-datetime">${fmtDate}${fmtTime ? ' · ' + fmtTime : ''}</div>
@@ -582,7 +619,7 @@
         <div class="tt-tags">
           <span class="tt-tag tt-tag-spots">${spotsTxt}</span>
           ${t.leaving_from ? `<span class="tt-tag tt-tag-leaving">From ${esc(t.leaving_from)}</span>` : ''}
-          ${t.greens_fees  ? `<span class="tt-tag tt-tag-fees">${esc(t.greens_fees)}</span>` : ''}
+          ${t.greens_fees  ? `<span class="tt-tag tt-tag-fees">${/^\$/.test(String(t.greens_fees).trim()) ? esc(t.greens_fees) : '$' + esc(t.greens_fees)}</span>` : ''}
         </div>
         ${t.notes || t.looking_for ? `<div class="tt-notes">${esc(t.notes || t.looking_for)}</div>` : ''}
         ${isOwner && !isPast ? `
@@ -601,7 +638,7 @@
         ${!isPast ? `
         <div class="tt-actions">
           <button class="btn-contact" data-name="${esc(p.first_name||'Host')}" onclick="toggleContact(this)">Contact ${esc(p.first_name||'Host')}</button>
-          ${!isOwner ? `<button class="btn-im-in" data-tt="${t.id}" data-host="${esc(hostName)}" data-course="${esc(t.course)}" data-date="${fmtDate}" onclick="imIn(this)" ${spotsLeft <= 0 ? 'disabled' : ''}>
+          ${!isOwner ? `<button class="btn-im-in" data-tt="${t.id}" data-host="${esc(hostName)}" data-course="${esc(courseDisplayName(t.course))}" data-date="${fmtDate}" onclick="imIn(this)" ${spotsLeft <= 0 ? 'disabled' : ''}>
             ${spotsLeft <= 0 ? 'Game full' : "I'm in!"}
           </button>` : ''}
         </div>
@@ -721,10 +758,9 @@
       date:         document.getElementById('p-date').value,
       time:         document.getElementById('p-time').value || null,
       spots:        spots,
-      greens_fees:  document.getElementById('p-fees').value.trim() || null,
+      greens_fees:  document.getElementById('p-fees').value.trim().replace(/^\$\s*/, '') || null,
       leaving_from: document.getElementById('p-leaving').value.trim() || null,
       looking_for:  document.getElementById('p-looking').value.trim() || null,
-      notes:        document.getElementById('p-notes').value.trim() || null,
     });
 
     if (error) { err.textContent = error.message; err.style.display = 'block'; btn.textContent = 'Post tee time'; btn.disabled = false; }
