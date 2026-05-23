@@ -25,16 +25,16 @@
 
     /* NAV */
     nav {
-      position: sticky; top: 0; z-index: 100;
+      position: -webkit-sticky; position: sticky; top: 0; z-index: 100;
       background: var(--bg2); border-bottom: 1px solid var(--border);
-      padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 140px;
+      padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 128px;
     }
     .nav-logo { display: flex; align-items: center; }
     
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
-    .btn-ghost-nav { background: transparent; color: var(--muted); border: none; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; font-family: inherit; border-radius: 8px; transition: color 0.15s; }
+    .nav-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; flex-wrap: nowrap; }
+    .btn-ghost-nav { background: transparent; color: var(--muted); border: none; font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 14px; font-family: inherit; border-radius: 8px; transition: color 0.15s; white-space: nowrap; }
     .btn-ghost-nav:hover { color: var(--text); }
-    .btn-cta-nav { background: var(--green); color: var(--bg); border: none; border-radius: 24px; font-size: 13px; font-weight: 700; cursor: pointer; padding: 9px 20px; font-family: inherit; transition: background 0.15s; }
+    .btn-cta-nav { background: var(--green); color: var(--bg); border: none; border-radius: 24px; font-size: 13px; font-weight: 700; cursor: pointer; padding: 9px 20px; font-family: inherit; transition: background 0.15s; white-space: nowrap; }
     .btn-cta-nav:hover { background: #a0dc88; }
 
     /* HERO */
@@ -61,7 +61,7 @@
     .hero-photo-placeholder { width: 100%; height: 100%; background: linear-gradient(145deg, #0e1f10 0%, #1a3520 40%, #0f2318 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
     .hero-photo-placeholder svg { opacity: 0.3; }
     .hero-photo-placeholder span { font-size: 12px; color: var(--muted); opacity: 0.6; }
-    .hero-photo-badge { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(11,15,12,0.85); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; text-align: center; white-space: nowrap; }
+    .hero-photo-badge { position: absolute; bottom: 20px; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); background: rgba(11,15,12,0.85); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; text-align: center; white-space: nowrap; }
     .hero-photo-badge-line1 { font-size: 13px; font-weight: 700; color: var(--text); }
     .hero-photo-badge-line2 { font-size: 11px; color: var(--green); margin-top: 2px; }
     .avatar-stack { display: flex; }
@@ -137,7 +137,11 @@
       .hero-photo-wrap { display: none; }
     }
     @media (max-width: 768px) {
-      nav { padding: 0 20px; }
+      nav { padding: 0 16px; height: 88px; gap: 8px; }
+      .nav-logo img { height: 72px !important; }
+      .nav-actions { gap: 6px; }
+      .btn-ghost-nav { padding: 8px 10px; font-size: 13px; }
+      .btn-cta-nav { padding: 9px 14px; font-size: 13px; }
       .hero { padding: 48px 24px 40px; }
       .hero h1 { font-size: 36px; }
       .stats { flex-wrap: wrap; }
