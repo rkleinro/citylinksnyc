@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CityLinks NYC — Member Board</title>
+  <title>CityLinks NYC | Member Board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -212,7 +212,7 @@
     <div class="section-hdr">
       <div>
         <h2>Members</h2>
-        <p>Everyone in the network — reach out and find your next playing partner.</p>
+        <p>Everyone in the network. Reach out and find your next playing partner.</p>
       </div>
       <input class="search-bar" type="text" placeholder="Search members..." oninput="filterMembers(this.value)">
     </div>
@@ -226,7 +226,7 @@
   <div class="modal">
     <button class="modal-close" onclick="closePostModal()">×</button>
     <h2>Post a tee time</h2>
-    <p>Your contact info will be shared automatically from your profile — no need to re-enter it.</p>
+    <p>Your contact info will be shared automatically from your profile. No need to re-enter it.</p>
     <div class="msg msg-err" id="post-err"></div>
     <div class="msg msg-ok" id="post-ok"></div>
     <form id="post-form" onsubmit="handlePost(event)">
@@ -270,6 +270,11 @@
       <div class="form-group">
         <label class="form-check">
           <input type="checkbox" id="pr-car"> I have a car and can offer rides
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-check">
+          <input type="checkbox" id="pr-notify"> Email me when a new game is posted
         </label>
       </div>
       <button class="btn-submit" type="submit" id="prof-btn">Save profile</button>
@@ -503,7 +508,7 @@
   function checkProfileComplete() {
     if (!currentProfile || currentProfile.phone) return;
     const wrap = document.getElementById('profile-banner-wrap');
-    wrap.innerHTML = `<div class="profile-banner"><p><strong>Complete your profile</strong> — add your phone number and handicap so other members can reach you.</p><button class="btn-post" onclick="openProfileModal()">Complete profile</button></div>`;
+    wrap.innerHTML = `<div class="profile-banner"><p><strong>Complete your profile.</strong> Add your phone number and handicap so other members can reach you.</p><button class="btn-post" onclick="openProfileModal()">Complete profile</button></div>`;
   }
 
   // ── TEE TIMES ─────────────────────────────────────────────
@@ -649,7 +654,7 @@
         <div class="contact-reveal" id="cr-${t.id}">
           ${p.phone ? `<div class="contact-row"><span class="contact-label">Phone</span><span class="contact-val"><a href="tel:${p.phone}">${esc(p.phone)}</a></span></div>` : ''}
           ${(p.email||currentUser.email) ? `<div class="contact-row"><span class="contact-label">Email</span><span class="contact-val"><a href="mailto:${p.email||''}">${esc(p.email||'')}</a></span></div>` : ''}
-          ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file — reach out via the member directory.</span></div>` : ''}
+          ${!p.phone && !p.email ? `<div class="contact-row"><span class="contact-val" style="color:var(--muted)">No contact info on file. Reach out via the member directory.</span></div>` : ''}
         </div>` : ''}
       </div>
     </div>`;
@@ -685,10 +690,10 @@
       user_id:     currentUser.id
     });
     if (error && !error.message.includes('duplicate')) {
-      btn.disabled = false; btn.textContent = "I'm in!"; showToast('Something went wrong — try again.'); return;
+      btn.disabled = false; btn.textContent = "I'm in!"; showToast('Something went wrong. Try again.'); return;
     }
     btn.textContent = 'Request sent!';
-    showToast(`Your interest in ${course} on ${date} has been noted — reach out to ${hostName} directly to confirm.`, true);
+    showToast(`Sent. ${hostName} will get an email with your info and reach out to confirm.`, true);
   }
 
   async function deleteTeeTime(btn) {
@@ -781,6 +786,8 @@
       document.getElementById('pr-loc').value   = currentProfile.location   || '';
       document.getElementById('pr-home').value  = currentProfile.home_course || '';
       document.getElementById('pr-car').checked = !!currentProfile.has_car;
+      // notify_new_games defaults to true if missing (matches the DB default)
+      document.getElementById('pr-notify').checked = currentProfile.notify_new_games !== false;
     }
     document.getElementById('profile-modal').classList.add('open');
     document.getElementById('user-dropdown').classList.remove('open');
@@ -801,6 +808,7 @@
       location:    document.getElementById('pr-loc').value.trim()   || null,
       home_course: document.getElementById('pr-home').value.trim()  || null,
       has_car:     document.getElementById('pr-car').checked,
+      notify_new_games: document.getElementById('pr-notify').checked,
     };
 
     const { error } = await sb.from('profiles').update(updates).eq('id', currentUser.id);
