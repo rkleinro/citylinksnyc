@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CityLinks NYC — Play More Golf. Meet More Golfers.</title>
+  <title>CityLinks NYC | Play More Golf. Meet More Golfers.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -171,12 +171,12 @@
     <div class="hero-text">
       <div class="live-badge">
         <div class="live-dot"></div>
-        <span class="live-text" id="live-label">Active this week</span>
+        <span class="live-text" id="live-label">Loading...</span>
       </div>
       <h1>Play more golf.<br><em>Meet more golfers.</em></h1>
-      <p>CityLinks is a free, member-run community for NYC golfers. Find a game this weekend, post your tee time, share a ride, and build your crew — all in one place.</p>
+      <p>CityLinks is an open network for NYC golfers. Think of it like a social country club for the rest of us. No clubhouse, no dues, no single course. Find a game, post your tee time, share a ride, and build your crew. All in one place.</p>
       <div class="hero-btns">
-        <button class="btn-primary" onclick="scrollToJoin()">Join the community — it's free</button>
+        <button class="btn-primary" onclick="scrollToJoin()">Join the network. It's free</button>
         <button class="btn-secondary" onclick="scrollToSignin()">Already a member</button>
       </div>
       <div class="members-preview">
@@ -187,14 +187,14 @@
           <div class="av av4">DL</div>
           <div class="av av5">SB</div>
         </div>
-        <div class="members-text"><strong id="hero-member-count">Loading...</strong> NYC golfers and counting</div>
+        <div class="members-text" id="members-text-line">Loading...</div>
       </div>
     </div>
     <div class="hero-photo-wrap">
       <div class="hero-photo">
         <img src="/hero-photo.jpg" alt="Golf course with NYC skyline backdrop" style="object-position: center 30%;" />
         <div class="hero-photo-badge">
-          <div class="hero-photo-badge-line1">NYC Golf Community</div>
+          <div class="hero-photo-badge-line1">The NYC Golf Network</div>
           <div class="hero-photo-badge-line2">Find your next game →</div>
         </div>
       </div>
@@ -204,9 +204,9 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-num" id="s-members">—</div><div class="stat-label">Members</div></div>
-  <div class="stat"><div class="stat-num" id="s-teetimes">—</div><div class="stat-label">Active Tee Times</div></div>
-  <div class="stat"><div class="stat-num" id="s-rounds">—</div><div class="stat-label">Rounds Posted</div></div>
+  <div class="stat"><div class="stat-num" id="s-members">···</div><div class="stat-label">Members</div></div>
+  <div class="stat"><div class="stat-num" id="s-teetimes">···</div><div class="stat-label">Active Tee Times</div></div>
+  <div class="stat"><div class="stat-num" id="s-rounds">···</div><div class="stat-label">Rounds Posted</div></div>
 </div>
 
 <!-- PREVIEW -->
@@ -230,22 +230,22 @@
   <!-- HOW IT WORKS -->
   <div class="how-wrap">
     <h2>How it works</h2>
-    <p class="how-sub">No apps, no fees, no nonsense. Just NYC golfers helping each other play more.</p>
+    <p class="how-sub">No clubhouse, no dues, no single course. Just NYC golfers helping each other play more.</p>
     <div class="how-grid">
       <div class="how-card">
-        <div class="how-num">01 — POST A GAME</div>
+        <div class="how-num">01 · POST A GAME</div>
         <h3>Share your tee time</h3>
-        <p>Have a tee time or access to a course? Post it on the board. Don't have one yet? Post anyway — use it to find playing partners or coordinate a game with people in your area.</p>
+        <p>Have a tee time or access to a course? Post it on the board. Don't have one yet? Post anyway and use it to recruit playing partners.</p>
       </div>
       <div class="how-card">
-        <div class="how-num">02 — FIND YOUR CREW</div>
-        <h3>Browse and connect</h3>
-        <p>See who's playing this weekend. Filter by date and reach out directly. Whether you have a car, need a ride, or just want to split a tee time — there's a spot for you.</p>
+        <div class="how-num">02 · JOIN A GAME</div>
+        <h3>Tap "I'm in"</h3>
+        <p>Browse the board, see who's playing where, and tap "I'm in" on any game that fits. The host gets an email with your info and reaches back to confirm.</p>
       </div>
       <div class="how-card">
-        <div class="how-num">03 — PLAY MORE GOLF</div>
-        <h3>Show up and tee off</h3>
-        <p>Coordinate the details, meet at the course, and play. You'll get a weekly email every Monday with all posted games. The more people join, the better it gets for everyone.</p>
+        <div class="how-num">03 · STAY IN THE LOOP</div>
+        <h3>Never miss a game</h3>
+        <p>Get an email every time someone posts a new tee time. Plus a Sunday reminder to post yours during golf season. Turn off either one any time from your profile.</p>
       </div>
     </div>
   </div>
@@ -271,13 +271,13 @@
 
     <!-- JOIN -->
     <div class="auth-card" id="join-card">
-      <h2>Join the community</h2>
+      <h2>Join the network</h2>
       <p>Free, always. Sign up and start connecting with NYC golfers right away.</p>
       <ul class="perks">
-        <li><div class="perk-dot"></div>Browse and post tee times every week</li>
+        <li><div class="perk-dot"></div>Browse and post tee times all season</li>
         <li><div class="perk-dot"></div>Find playing partners and share rides from the city</li>
-        <li><div class="perk-dot"></div>Weekly tee time roundup every Monday morning</li>
-        <li><div class="perk-dot"></div>Access to a growing network of 60+ NYC golfers</li>
+        <li><div class="perk-dot"></div>Email alerts when new games go up, plus a Sunday reminder</li>
+        <li><div class="perk-dot"></div><span id="perk-text">Access to a network of NYC golfers</span></li>
       </ul>
       <div class="msg msg-error" id="su-err"></div>
       <div class="msg msg-success" id="su-ok"></div>
@@ -296,7 +296,7 @@
   </div>
 </div>
 
-<footer>CityLinks NYC &nbsp;·&nbsp; A member-run golf community &nbsp;·&nbsp; New York City &nbsp;·&nbsp; <a href="mailto:hello@citylinksnyc.com">hello@citylinksnyc.com</a></footer>
+<footer>CityLinks NYC &nbsp;·&nbsp; An open network for NYC golfers &nbsp;·&nbsp; New York City &nbsp;·&nbsp; <a href="mailto:ross@citylinksnyc.com">ross@citylinksnyc.com</a></footer>
 
 <script>
   const SUPABASE_URL = 'https://ecdfabwgojvrkzlbknww.supabase.co';
@@ -311,6 +311,27 @@
     loadStats();
   });
 
+  // Round member count down to the nearest 10. For fewer than 10, return as-is.
+  function roundDownToTen(n) {
+    if (n < 10) return n;
+    return Math.floor(n / 10) * 10;
+  }
+  // Stat number: "50+" for >=10, raw for <10.
+  function statMemberDisplay(n) {
+    if (n < 10) return String(n);
+    return `${roundDownToTen(n)}+`;
+  }
+  // Hero line: "Over <strong>50</strong> NYC golfers" for >=10. Singular handled for <10.
+  function heroMemberHtml(n) {
+    if (n < 10) return `<strong>${n}</strong> NYC golfer${n === 1 ? '' : 's'}`;
+    return `Over <strong>${roundDownToTen(n)}</strong> NYC golfers`;
+  }
+  // Perks line: "Access to a network of over 50 NYC golfers".
+  function perkText(n) {
+    if (n < 10) return `Access to a network of NYC golfers`;
+    return `Access to a network of over ${roundDownToTen(n)} NYC golfers`;
+  }
+
   async function loadStats() {
     try {
       const today = new Date().toISOString().split('T')[0];
@@ -319,10 +340,19 @@
         sb.from('tee_times').select('*', { count: 'exact', head: true }).gte('date', today),
         sb.from('tee_times').select('*', { count: 'exact', head: true }).lt('date', today)
       ]);
-      if (mem    !== null) { document.getElementById('s-members').textContent = mem; document.getElementById('hero-member-count').textContent = mem; }
-      if (active !== null) { document.getElementById('s-teetimes').textContent = active; document.getElementById('live-label').textContent = `${active} tee time${active === 1 ? '' : 's'} posted this week`; }
-      if (rounds !== null)   document.getElementById('s-rounds').textContent = rounds;
-    } catch(e) { document.getElementById('hero-member-count').textContent = '60+'; }
+      if (mem !== null) {
+        document.getElementById('s-members').textContent = statMemberDisplay(mem);
+        document.getElementById('members-text-line').innerHTML = heroMemberHtml(mem);
+        document.getElementById('perk-text').textContent = perkText(mem);
+      }
+      if (active !== null) {
+        document.getElementById('s-teetimes').textContent = active;
+        document.getElementById('live-label').textContent = `${active} tee time${active === 1 ? '' : 's'} available`;
+      }
+      if (rounds !== null) document.getElementById('s-rounds').textContent = rounds;
+    } catch(e) {
+      document.getElementById('members-text-line').innerHTML = `Over <strong>50</strong> NYC golfers`;
+    }
   }
 
   async function handleSignin(e) {
@@ -347,7 +377,7 @@
     btn.textContent = 'Creating account...'; btn.disabled = true; err.style.display = 'none'; ok.style.display = 'none';
     const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: first, last_name: last } } });
     if (error) { err.textContent = error.message; err.style.display = 'block'; btn.textContent = 'Create my free account'; btn.disabled = false; }
-    else { ok.textContent = `Welcome, ${first}! Your account is ready — sign in below.`; ok.style.display = 'block'; document.querySelector('form:last-of-type').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
+    else { ok.textContent = `Welcome, ${first}! Your account is ready. Sign in below.`; ok.style.display = 'block'; document.querySelector('form:last-of-type').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
   }
 
   async function forgotPassword(e) {
@@ -372,7 +402,7 @@
       err.textContent = error.message;
       err.style.display = 'block';
     } else {
-      ok.textContent = 'Reset email sent — check your inbox (and spam folder).';
+      ok.textContent = 'Reset email sent. Check your inbox (and spam folder).';
       ok.style.display = 'block';
     }
   }
