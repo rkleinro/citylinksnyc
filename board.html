@@ -6,7 +6,10 @@
   <title>CityLinks NYC | Member Board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -230,17 +233,17 @@
     <div class="msg msg-err" id="post-err"></div>
     <div class="msg msg-ok" id="post-ok"></div>
     <form id="post-form" onsubmit="handlePost(event)">
-      <div class="form-group"><label class="form-label">Course name</label><input class="form-input" id="p-course" placeholder="e.g. Bethpage Black" required></div>
+      <div class="form-group"><label class="form-label">Course name</label><input class="form-input" id="p-course" placeholder="e.g., Bethpage Black" required></div>
       <div class="form-row-2">
-        <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="p-date" required></div>
-        <div class="form-group"><label class="form-label">Tee time</label><input class="form-input" type="time" id="p-time"></div>
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="text" id="p-date" placeholder="Select date" required></div>
+        <div class="form-group"><label class="form-label">Tee time</label><input class="form-input" type="text" id="p-time" placeholder="Select time"></div>
       </div>
       <div class="form-row-2">
         <div class="form-group"><label class="form-label">Spots available</label><input class="form-input" type="number" id="p-spots" min="1" max="3" value="1" required></div>
-        <div class="form-group"><label class="form-label">Greens fees (approx)</label><div class="input-prefix"><span>$</span><input class="form-input" id="p-fees" placeholder="e.g. 60 walk"></div></div>
+        <div class="form-group"><label class="form-label">Greens fees (approx)</label><div class="input-prefix"><span>$</span><input class="form-input" type="number" id="p-fees" min="0" max="1000" step="1" placeholder="78"></div></div>
       </div>
-      <div class="form-group"><label class="form-label">Leaving from</label><input class="form-input" id="p-leaving" placeholder="e.g. Upper East Side, UES"></div>
-      <div class="form-group"><label class="form-label">Looking for</label><input class="form-input" id="p-looking" placeholder="e.g. Anyone welcome, have a car to offer"></div>
+      <div class="form-group"><label class="form-label">Leaving from</label><input class="form-input" id="p-leaving" placeholder="e.g., Upper East Side, UES"></div>
+      <div class="form-group"><label class="form-label">Additional Comments</label><input class="form-input" id="p-looking" placeholder="e.g., Anyone welcome, have a car to offer"></div>
       <button class="btn-submit" type="submit" id="post-btn">Post tee time</button>
     </form>
   </div>
@@ -319,20 +322,21 @@
   //   displayName — official name shown on the tile (normalizes typos / shorthand)
   //   image       — direct URL from the course's website (wins over wiki)
   //   wiki        — Wikipedia article title used as a fallback when no image
-  // Order matters — more specific entries (e.g. "Bethpage Black") must come BEFORE
+  // Order matters: more specific entries (e.g. "Bethpage Black") must come BEFORE
   // generic ones (e.g. "Bethpage").
-  const BETHPAGE_IMG    = 'https://www.bethpagegolfcourse.com/wp-content/uploads/2018/09/bethapge-sand-2.jpg';
+  // All Bethpage courses use the iconic 18th hole shot.
+  const BETHPAGE_BLACK_IMG = 'https://www.bethpagegolfcourse.com/wp-content/uploads/2018/09/bethpage-18-1024x682.jpg';
   const FERRY_POINT_IMG = 'https://casinos.ballys.com/golf-links-ferry-point/files/7658/DJI_0611_20240125145152.jpg';
-  const PELHAM_IMG      = 'https://www.pelhamsplitrock.com/wp-content/uploads/sites/30/2025/08/Pelham-Bay-Split-Rock-Golf-Course-Events-6-e1755311070496-1024x321.jpg';
+  const PELHAM_IMG      = 'https://www.pelhamsplitrock.com/wp-content/uploads/sites/30/2024/09/pelham-bay-banner-1024x282.jpg';
 
   const COURSE_LOOKUP = [
-    // Bethpage State Park — all five courses share one hero shot
-    { keywords: ['bethpage', 'black'],   displayName: 'Bethpage Black',  image: BETHPAGE_IMG },
-    { keywords: ['bethpage', 'red'],     displayName: 'Bethpage Red',    image: BETHPAGE_IMG },
-    { keywords: ['bethpage', 'blue'],    displayName: 'Bethpage Blue',   image: BETHPAGE_IMG },
-    { keywords: ['bethpage', 'green'],   displayName: 'Bethpage Green',  image: BETHPAGE_IMG },
-    { keywords: ['bethpage', 'yellow'],  displayName: 'Bethpage Yellow', image: BETHPAGE_IMG },
-    { keywords: ['bethpage'],            displayName: 'Bethpage State Park', image: BETHPAGE_IMG },
+    // Bethpage State Park
+    { keywords: ['bethpage', 'black'],   displayName: 'Bethpage Black',  image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'red'],     displayName: 'Bethpage Red',    image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'blue'],    displayName: 'Bethpage Blue',   image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'green'],   displayName: 'Bethpage Green',  image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'yellow'],  displayName: 'Bethpage Yellow', image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage'],            displayName: 'Bethpage State Park', image: BETHPAGE_BLACK_IMG },
 
     // NYC city courses (GolfNYC operates Van Cortlandt, Queens, Staten Island)
     // Note: 'cortland' matches both "cortlandt" and the common "cortland" typo
@@ -340,9 +344,9 @@
     { keywords: ['clearview'],           displayName: 'Clearview Park', image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602090342_0320_D.jpg' },
     { keywords: ['douglaston'],          displayName: 'Douglaston',     image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602065620_0078_D.jpg' },
     { keywords: ['forest', 'park'],      displayName: 'Forest Park',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601183219_0717_D.jpg' },
-    { keywords: ['kissena'],             displayName: 'Kissena Park',   image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DSC_1347.jpg' },
-    { keywords: ['la', 'tourette'],      displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601070829_0266_D.jpg' },
-    { keywords: ['latourette'],          displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601070829_0266_D.jpg' },
+    { keywords: ['kissena'],             displayName: 'Kissena Park',   image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602100712_0352_D.jpg' },
+    { keywords: ['la', 'tourette'],      displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601060238_0029_D.jpg' },
+    { keywords: ['latourette'],          displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601060238_0029_D.jpg' },
     { keywords: ['silver', 'lake'],      displayName: 'Silver Lake',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601090037_0466_D.jpg' },
     { keywords: ['south', 'shore'],      displayName: 'South Shore',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250531183229_0919_D.jpg' },
 
@@ -350,8 +354,8 @@
     { keywords: ['split', 'rock'],       displayName: 'Split Rock',          image: PELHAM_IMG },
     { keywords: ['pelham'],              displayName: 'Pelham Bay',          image: PELHAM_IMG },
     { keywords: ['mosholu'],             displayName: 'Mosholu',             image: 'https://www.mosholugolf.com/wp-content/uploads/sites/7832/2025/01/DJI_20241107035619_0021_D-HDR.jpg' },
-    { keywords: ['dyker'],               displayName: 'Dyker Beach',         image: 'https://www.dykerbeachgc.com/wp-content/uploads/sites/12/2020/04/amenity-photo-1-e1755805167453-1024x312.jpg' },
-    { keywords: ['marine', 'park'],      displayName: 'Marine Park',         wiki:  'Marine Park, Brooklyn' },
+    { keywords: ['dyker'],               displayName: 'Dyker Beach',         image: 'https://www.dykerbeachgc.com/wp-content/uploads/sites/12/2024/08/dyker-beach-golf-course-1024x592.jpg' },
+    { keywords: ['marine', 'park'],      displayName: 'Marine Park',         image: 'https://golf-pass-brightspot.s3.amazonaws.com/c4/31/b7cb09d6850f0c033404404a9b32/12905.jpg' },
 
     // Bronx — Bally's Ferry Point (formerly Trump)
     { keywords: ['trump', 'ferry'],      displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
@@ -362,7 +366,7 @@
     { keywords: ['harbor', 'links'],     displayName: 'Harbor Links',                  image: 'https://www.harborlinks.com/wp-content/uploads/2025/01/304182599_533453718784016_3160601528738936402_n-1400x975.jpg' },
     { keywords: ['middle', 'bay'],       displayName: 'The Golf Club at Middle Bay' },
     { keywords: ['lawrence', 'yacht'],   displayName: 'Lawrence Yacht & Country Club', image: 'https://www.lycc.cc/wp-content/uploads/sites/8830/2024/01/Lawrence-Yacht-and-Country-Club-Flyover.jpg' },
-    { keywords: ['eisenhower'],          displayName: 'Eisenhower Park',         wiki: 'Eisenhower Park' },
+    { keywords: ['eisenhower'],          displayName: 'Eisenhower Park',         image: 'https://golf-pass-brightspot.s3.amazonaws.com/de/8e/12181e5cba4e0da4d9879500528c/105302.jpg' },
     { keywords: ['bergen', 'point'],     displayName: 'Bergen Point',            wiki: 'Bergen Point Country Club' },
     { keywords: ['sunken', 'meadow'],    displayName: 'Sunken Meadow',           wiki: 'Sunken Meadow State Park' },
     { keywords: ['heckscher'],           displayName: 'Heckscher State Park',    wiki: 'Heckscher State Park' },
@@ -372,13 +376,13 @@
     { keywords: ['cantiague'],           displayName: 'Cantiague Park',          wiki: 'Cantiague Park' },
 
     // Westchester / Hudson Valley
-    { keywords: ['pound', 'ridge'],      displayName: 'Pound Ridge Golf Club' },
-    { keywords: ['union', 'vale'],       displayName: 'The Links at Union Vale' },
+    { keywords: ['pound', 'ridge'],      displayName: 'Pound Ridge Golf Club', image: 'https://cdn.sanity.io/images/03mhssoh/production/8bdbf90201548a905511fe7c68cfb785ffaa6685-6000x4000.jpg' },
+    { keywords: ['union', 'vale'],       displayName: 'The Links at Union Vale', image: 'https://golf-pass-brightspot.s3.amazonaws.com/4f/6f/a5c1fc22076b0f7d28e96ae33084/105281.jpg' },
     { keywords: ['mansion', 'ridge'],    displayName: 'The Golf Club at Mansion Ridge' },
     { keywords: ['saxon', 'woods'],      displayName: 'Saxon Woods',  wiki: 'Saxon Woods Park' },
-    { keywords: ['sprain', 'lake'],      displayName: 'Sprain Lake',  wiki: 'Sprain Lake Golf Course' },
-    { keywords: ['mohansic'],            displayName: 'Mohansic',     wiki: 'Mohansic Golf Course' },
-    { keywords: ['dunwoodie'],           displayName: 'Dunwoodie',    wiki: 'Dunwoodie Golf Course' },
+    { keywords: ['sprain', 'lake'],      displayName: 'Sprain Lake',  image: 'https://golf.westchestercountyny.gov/wp-content/uploads/2022/04/sprain-lake-cover-shot-e1651179755410.jpg' },
+    { keywords: ['mohansic'],            displayName: 'Mohansic',     image: 'https://golf-pass-brightspot.s3.amazonaws.com/e3/9b/2213c107e9b71f45c267b59ff269/66387.jpg' },
+    { keywords: ['dunwoodie'],           displayName: 'Dunwoodie',    image: 'https://golf-pass-brightspot.s3.amazonaws.com/e0/57/519ea9a716f8bbb06d386c5cdc6f/66389.jpg' },
     { keywords: ['hudson', 'hills'],     displayName: 'Hudson Hills', wiki: 'Hudson Hills Golf Course' },
     { keywords: ['maple', 'moor'],       displayName: 'Maple Moor',   wiki: 'Maple Moor Golf Course' },
 
@@ -389,10 +393,10 @@
     // New Jersey
     { keywords: ['skyway'],              displayName: 'Skyway Golf Course',     image: 'https://skywaygolfcourse.com/wp-content/uploads/sites/4/2021/02/unspecified6.jpg' },
     { keywords: ['neshanic'],            displayName: 'Neshanic Valley',        image: 'https://www.neshanicvalleygolf.com/wp-content/uploads/sites/893/2015/04/slider1.jpg' },
-    { keywords: ['rock', 'spring'],      displayName: 'Rock Spring Golf Club' },
+    { keywords: ['rock', 'spring'],      displayName: 'Rock Spring Golf Club',   image: 'https://rockspringgolf.com/wp-content/uploads/sites/18/2022/11/rock-spring-golf-club-01.webp' },
     { keywords: ['knoll'],               displayName: 'Knoll Country Club' },
     { keywords: ['architects'],          displayName: 'The Architects Golf Club' },
-    { keywords: ['ballyowen'],           displayName: 'Ballyowen Golf Club' },
+    { keywords: ['ballyowen'],           displayName: 'Ballyowen Golf Club',     image: 'https://golf-pass-brightspot.s3.amazonaws.com/c3/ee/6031e3701787f18bff33b2f9ec86/122739.jpg' },
   ];
 
   function lookupCuratedCourse(courseName) {
@@ -481,8 +485,25 @@
       if (!dd.contains(e.target) && !document.getElementById('user-av').contains(e.target)) dd.classList.remove('open');
     });
 
-    // Set today as min date for post form
-    document.getElementById('p-date').min = new Date().toISOString().split('T')[0];
+    // Date + time pickers — flatpickr gives a consistent calendar/clock UI
+    // across browsers (native type=date/time pickers are flaky on desktop Safari).
+    flatpickr('#p-date', {
+      dateFormat: 'Y-m-d',
+      altInput: true,
+      altFormat: 'D, M j, Y',
+      minDate: 'today',
+      disableMobile: true,
+    });
+    flatpickr('#p-time', {
+      enableTime: true,
+      noCalendar: true,
+      dateFormat: 'H:i',
+      altInput: true,
+      altFormat: 'h:i K',
+      time_24hr: false,
+      minuteIncrement: 5,
+      disableMobile: true,
+    });
   });
 
   // ── PROFILE ───────────────────────────────────────────────
@@ -761,13 +782,22 @@
     // Clamp spots to 1–3 in case the HTML max attribute was bypassed.
     const rawSpots = parseInt(document.getElementById('p-spots').value) || 1;
     const spots = Math.max(1, Math.min(3, rawSpots));
+
+    // Clamp greens fees to 0–1000 in case the HTML attributes were bypassed.
+    const rawFees = document.getElementById('p-fees').value.trim();
+    let feesVal = null;
+    if (rawFees !== '') {
+      const n = parseInt(rawFees, 10);
+      if (!isNaN(n)) feesVal = String(Math.max(0, Math.min(1000, n)));
+    }
+
     const { error } = await sb.from('tee_times').insert({
       user_id:      currentUser.id,
       course:       document.getElementById('p-course').value.trim(),
       date:         document.getElementById('p-date').value,
       time:         document.getElementById('p-time').value || null,
       spots:        spots,
-      greens_fees:  document.getElementById('p-fees').value.trim().replace(/^\$\s*/, '') || null,
+      greens_fees:  feesVal,
       leaving_from: document.getElementById('p-leaving').value.trim() || null,
       looking_for:  document.getElementById('p-looking').value.trim() || null,
     });
