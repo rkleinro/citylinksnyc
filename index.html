@@ -334,24 +334,27 @@
 
   async function loadStats() {
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const [{ count: mem }, { count: active }, { count: rounds }] = await Promise.all([
-        sb.from('profiles').select('*', { count: 'exact', head: true }),
-        sb.from('tee_times').select('*', { count: 'exact', head: true }).gte('date', today),
-        sb.from('tee_times').select('*', { count: 'exact', head: true }).lt('date', today)
-      ]);
-      if (mem !== null) {
-        document.getElementById('s-members').textContent = statMemberDisplay(mem);
-        document.getElementById('members-text-line').innerHTML = heroMemberHtml(mem);
-        document.getElementById('perk-text').textContent = perkText(mem);
-      }
-      if (active !== null) {
-        document.getElementById('s-teetimes').textContent = active;
-        document.getElementById('live-label').textContent = `${active} tee time${active === 1 ? '' : 's'} available`;
-      }
-      if (rounds !== null) document.getElementById('s-rounds').textContent = rounds;
+      // RLS blocks anon from counting profiles/tee_times directly,
+      // so we read aggregates from a SECURITY DEFINER RPC.
+      const { data, error } = await sb.rpc('public_site_stats');
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (!row) throw new Error('No stats returned');
+      const mem    = row.total_members    ?? 0;
+      const active = row.active_tee_times ?? 0;
+      const rounds = row.rounds_played    ?? 0;
+
+      document.getElementById('s-members').textContent = statMemberDisplay(mem);
+      document.getElementById('members-text-line').innerHTML = heroMemberHtml(mem);
+      document.getElementById('perk-text').textContent = perkText(mem);
+
+      document.getElementById('s-teetimes').textContent = active;
+      document.getElementById('live-label').textContent = `${active} tee time${active === 1 ? '' : 's'} available`;
+
+      document.getElementById('s-rounds').textContent = rounds;
     } catch(e) {
-      document.getElementById('members-text-line').innerHTML = `Over <strong>50</strong> NYC golfers`;
+      console.warn('loadStats failed:', e);
+      document.getElementById('members-text-line').innerHTML = `<strong>Join</strong> the network`;
     }
   }
 
