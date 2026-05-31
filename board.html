@@ -203,7 +203,7 @@
     <div class="section-hdr">
       <div>
         <h2>This week's tee times</h2>
-        <p>Reach out directly to join a game, or post your own.</p>
+        <p>Reach out directly or click "I'm in" to join a game.</p>
       </div>
     </div>
     <div id="profile-banner-wrap"></div>
@@ -278,6 +278,11 @@
       <div class="form-group">
         <label class="form-check">
           <input type="checkbox" id="pr-notify"> Email me when a new game is posted
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="form-check">
+          <input type="checkbox" id="pr-notify-weekly"> Send me the Sunday weekly reminder
         </label>
       </div>
       <button class="btn-submit" type="submit" id="prof-btn">Save profile</button>
@@ -818,6 +823,7 @@
       document.getElementById('pr-car').checked = !!currentProfile.has_car;
       // notify_new_games defaults to true if missing (matches the DB default)
       document.getElementById('pr-notify').checked = currentProfile.notify_new_games !== false;
+      document.getElementById('pr-notify-weekly').checked = currentProfile.notify_weekly_reminder !== false;
     }
     document.getElementById('profile-modal').classList.add('open');
     document.getElementById('user-dropdown').classList.remove('open');
@@ -839,6 +845,7 @@
       home_course: document.getElementById('pr-home').value.trim()  || null,
       has_car:     document.getElementById('pr-car').checked,
       notify_new_games: document.getElementById('pr-notify').checked,
+      notify_weekly_reminder: document.getElementById('pr-notify-weekly').checked,
     };
 
     const { error } = await sb.from('profiles').update(updates).eq('id', currentUser.id);
