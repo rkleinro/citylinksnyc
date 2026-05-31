@@ -655,8 +655,9 @@
           <span class="tt-tag tt-tag-spots">${spotsTxt}</span>
           ${t.leaving_from ? `<span class="tt-tag tt-tag-leaving">From ${esc(t.leaving_from)}</span>` : ''}
           ${t.greens_fees  ? `<span class="tt-tag tt-tag-fees">${/^\$/.test(String(t.greens_fees).trim()) ? esc(t.greens_fees) : '$' + esc(t.greens_fees)}</span>` : ''}
+          ${p.has_car ? `<span class="tt-tag" style="background:#1a2e1a;color:var(--green);border:1px solid var(--subtle);">Has car</span>` : ''}
         </div>
-        ${t.notes || t.looking_for ? `<div class="tt-notes">${esc(t.notes || t.looking_for)}</div>` : ''}
+        ${t.notes || t.looking_for ? `<div class="tt-notes"><span style="font-style:normal;font-weight:600;color:var(--text);">Comments:</span> ${esc(t.notes || t.looking_for)}</div>` : ''}
         ${isOwner && !isPast ? `
         <div class="tt-actions" style="margin-bottom:10px;">
           <div class="spots-ctrl">
