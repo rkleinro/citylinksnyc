@@ -422,14 +422,20 @@
       const active = row.active_tee_times ?? 0;
       const rounds = row.rounds_played    ?? 0;
 
-      document.getElementById('s-members').textContent = statMemberDisplay(mem);
-      document.getElementById('members-text-line').innerHTML = heroMemberHtml(mem);
-      document.getElementById('perk-text').textContent = perkText(mem);
+      const set = (id, val, html) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (html) el.innerHTML = val; else el.textContent = val;
+      };
 
-      document.getElementById('s-teetimes').textContent = active;
-      document.getElementById('live-label').textContent = `${active} tee time${active === 1 ? '' : 's'} available`;
+      set('s-members', statMemberDisplay(mem));
+      set('members-text-line', heroMemberHtml(mem), true);
+      set('perk-text', perkText(mem));
 
-      document.getElementById('s-rounds').textContent = rounds;
+      set('s-teetimes', active);
+      set('live-label', `${active} tee time${active === 1 ? '' : 's'} available`);
+
+      set('s-rounds', rounds);
     } catch(e) {
       console.warn('loadStats failed:', e);
       document.getElementById('members-text-line').innerHTML = `<strong>Join</strong> the network`;
