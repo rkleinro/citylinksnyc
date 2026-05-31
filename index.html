@@ -131,6 +131,28 @@
     /* FOOTER */
     footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 28px 48px; text-align: center; font-size: 12px; color: var(--muted); }
 
+    /* TERMS MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; padding: 24px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; max-width: 560px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; }
+    .modal-header { padding: 24px 28px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .modal-header h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .modal-header p { font-size: 12px; color: var(--muted); }
+    .modal-body { overflow-y: auto; padding: 20px 28px; flex: 1; }
+    .modal-body h4 { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 8px; }
+    .modal-body h4:first-child { margin-top: 0; }
+    .modal-body p { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 8px; }
+    .modal-footer { padding: 16px 28px 24px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .terms-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; cursor: pointer; }
+    .terms-check input[type="checkbox"] { margin-top: 2px; accent-color: var(--green); width: 15px; height: 15px; flex-shrink: 0; cursor: pointer; }
+    .terms-check span { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .terms-check a { color: var(--green); }
+    .btn-accept { width: 100%; padding: 13px; background: var(--green); color: var(--bg); border: none; border-radius: 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .btn-accept:hover:not(:disabled) { background: #a0dc88; }
+    .btn-accept:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-cancel { width: 100%; margin-top: 8px; padding: 10px; background: transparent; color: var(--muted); border: none; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .btn-cancel:hover { color: var(--text); }
+
     /* RESPONSIVE */
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; gap: 40px; }
@@ -174,7 +196,7 @@
         <span class="live-text" id="live-label">Loading...</span>
       </div>
       <h1>Play more golf.<br><em>Meet more golfers.</em></h1>
-      <p>CityLinks is an open network for NYC golfers. A social country club for the rest of us. No clubhouse, no dues, no single course. Post your tee time, find a game, share a ride, build your crew.</p>
+      <p>CityLinks is an open network for NYC golfers. A social country club for the rest of us. No clubhouse, no dues, no single course. Post your tee time, find a game, share a ride, build your network.</p>
       <div class="hero-btns">
         <button class="btn-primary" onclick="scrollToJoin()">Join free</button>
         <button class="btn-secondary" onclick="scrollToSignin()">Already a member</button>
@@ -230,7 +252,6 @@
   <!-- HOW IT WORKS -->
   <div class="how-wrap">
     <h2>How it works</h2>
-    <p class="how-sub">No clubhouse, no dues, no single course. Just NYC golfers helping each other play more.</p>
     <div class="how-grid">
       <div class="how-card">
         <div class="how-num">01 · POST A GAME</div>
@@ -274,7 +295,7 @@
       <h2>Join the network</h2>
       <p>Free. Start finding games right away.</p>
       <ul class="perks">
-        <li><div class="perk-dot"></div>Meet other NYC golfers. Make friends, find playing partners, grow your game.</li>
+        <li><div class="perk-dot"></div>Meet other NYC golfers</li>
         <li><div class="perk-dot"></div>Share rides to the course</li>
         <li><div class="perk-dot"></div>Post and find games all season</li>
         <li><div class="perk-dot"></div>Play more golf.</li>
@@ -298,6 +319,51 @@
 
 <footer>CityLinks NYC &nbsp;·&nbsp; An open network for NYC golfers &nbsp;·&nbsp; New York City &nbsp;·&nbsp; <a href="mailto:ross@citylinksnyc.com">ross@citylinksnyc.com</a></footer>
 
+<!-- TERMS MODAL -->
+<div class="modal-overlay" id="terms-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Terms and Conditions</h3>
+      <p>Read carefully before creating your account.</p>
+    </div>
+    <div class="modal-body" id="terms-scroll">
+      <h4>1. Eligibility</h4>
+      <p>You must be 18 years of age or older to create an account and participate in CityLinks. By agreeing to these terms, you confirm that you meet this requirement.</p>
+
+      <h4>2. Assumption of Risk</h4>
+      <p>Golf and its associated activities carry inherent risks. These include, but are not limited to: personal injury from golf equipment or course conditions, injury caused by other players, property damage, and in rare cases, serious injury or death. Travel to and from golf courses involves additional risks outside CityLinks's control.</p>
+      <p>By participating, you voluntarily assume all such risks. You acknowledge that some participants are strangers and that CityLinks does not screen, supervise, or vouch for any individual member.</p>
+
+      <h4>3. Release of Liability</h4>
+      <p>To the fullest extent permitted by law, you release and hold harmless CityLinks, its founder, and any affiliated organizers from any and all claims, demands, losses, or liabilities arising out of or related to your participation. This includes injuries sustained while golfing, harm caused by other participants, and incidents occurring during travel to or from any CityLinks activity or course.</p>
+      <p>This release applies regardless of cause, including the negligence of CityLinks or its organizers.</p>
+
+      <h4>4. Tee Times and Greens Fees</h4>
+      <p>CityLinks facilitates connections between players but does not book, pay for, or guarantee tee times. When you book a tee time, you assume full financial responsibility for that booking. If playing partners cancel or drop out, CityLinks is not liable for any resulting greens fees, penalties, or non-refundable charges. Always confirm your group before booking a non-refundable time.</p>
+
+      <h4>5. Media Release</h4>
+      <p>By participating in CityLinks activities, you grant CityLinks a perpetual, royalty-free license to use your name, image, likeness, and voice in photos, videos, or other media captured during any CityLinks-related activity. This content may be used for promotional purposes including social media, the CityLinks website, email marketing, and other materials, without additional notice, approval, or compensation.</p>
+
+      <h4>6. Indemnification</h4>
+      <p>You agree to indemnify and hold harmless CityLinks and its organizers from any claims, costs, or damages arising from your conduct, your participation, or your violation of these terms.</p>
+
+      <h4>7. Governing Law</h4>
+      <p>These terms are governed by the laws of the State of New York. Any disputes shall be resolved in the courts of New York County.</p>
+
+      <h4>8. Changes to These Terms</h4>
+      <p>CityLinks may update these terms from time to time. Continued participation after an update constitutes acceptance of the revised terms.</p>
+    </div>
+    <div class="modal-footer">
+      <label class="terms-check">
+        <input type="checkbox" id="terms-agree">
+        <span>I am 18 or older and I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a>, including the release of liability and media release.</span>
+      </label>
+      <button class="btn-accept" id="terms-accept-btn" disabled onclick="acceptTermsAndSignup()">Accept &amp; Create Account</button>
+      <button class="btn-cancel" onclick="closeTermsModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const SUPABASE_URL = 'https://ecdfabwgojvrkzlbknww.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjZGZhYndnb2p2cmt6bGJrbnd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTIxNjUsImV4cCI6MjA5Mjc4ODE2NX0.hSpRtYo4cv0wKM6LwJRGtxLXQMboRZjwDQRBHRdVlO0';
@@ -309,6 +375,18 @@
     const signedOut = new URLSearchParams(window.location.search).get('signedout');
     if (session && !signedOut) { window.location.href = 'board.html'; return; }
     loadStats();
+
+    // Terms modal checkbox toggle
+    const cb = document.getElementById('terms-agree');
+    if (cb) cb.addEventListener('change', () => {
+      document.getElementById('terms-accept-btn').disabled = !cb.checked;
+    });
+
+    // Close modal on overlay click
+    const overlay = document.getElementById('terms-modal');
+    if (overlay) overlay.addEventListener('click', function(e) {
+      if (e.target === this) closeTermsModal();
+    });
   });
 
   // Round member count down to the nearest 10. For fewer than 10, return as-is.
@@ -368,8 +446,26 @@
     else window.location.href = 'board.html';
   }
 
-  async function handleSignup(e) {
+  function handleSignup(e) {
     e.preventDefault();
+    // Validate form before showing modal
+    const first = document.getElementById('su-first').value.trim();
+    const last  = document.getElementById('su-last').value.trim();
+    const email = document.getElementById('su-email').value.trim();
+    const pass  = document.getElementById('su-pass').value;
+    if (!first || !last || !email || !pass) return;
+    // Reset modal state and open it
+    document.getElementById('terms-agree').checked = false;
+    document.getElementById('terms-accept-btn').disabled = true;
+    document.getElementById('terms-modal').classList.add('open');
+  }
+
+  function closeTermsModal() {
+    document.getElementById('terms-modal').classList.remove('open');
+  }
+
+  async function acceptTermsAndSignup() {
+    closeTermsModal();
     const btn = document.getElementById('su-btn');
     const err = document.getElementById('su-err');
     const ok  = document.getElementById('su-ok');
@@ -380,7 +476,7 @@
     btn.textContent = 'Creating account...'; btn.disabled = true; err.style.display = 'none'; ok.style.display = 'none';
     const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: first, last_name: last } } });
     if (error) { err.textContent = error.message; err.style.display = 'block'; btn.textContent = 'Create my free account'; btn.disabled = false; }
-    else { ok.textContent = `Welcome, ${first}! Your account is ready. Sign in below.`; ok.style.display = 'block'; document.querySelector('form:last-of-type').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
+    else { ok.textContent = `Welcome, ${first}! Your account is ready. Sign in below.`; ok.style.display = 'block'; document.getElementById('signup-form').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
   }
 
   async function forgotPassword(e) {
