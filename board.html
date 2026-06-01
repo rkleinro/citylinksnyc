@@ -290,6 +290,38 @@
   </div>
 </div>
 
+<!-- TERMS GATE (first login) -->
+<div class="modal-overlay" id="terms-gate" style="z-index:2000;">
+  <div class="modal">
+    <h2>Agree to continue</h2>
+    <p>Before you use the board, please review and accept the Terms and Conditions.</p>
+    <div class="modal-body" id="terms-gate-scroll" style="max-height:340px; overflow-y:auto; border:1px solid #e5e7eb; border-radius:10px; padding:16px; margin:12px 0; text-align:left;">
+      <h4>1. Eligibility</h4>
+      <p>You must be 18 years of age or older to use CityLinks. By agreeing, you confirm you meet this requirement.</p>
+      <h4>2. Assumption of Risk</h4>
+      <p>Golf and its associated activities carry inherent risks, including personal injury, property damage, and in rare cases serious injury or death. Travel to and from courses involves additional risks outside CityLinks's control. You voluntarily assume all such risks. Some participants are strangers, and CityLinks does not screen, supervise, or vouch for any member.</p>
+      <h4>3. Release of Liability</h4>
+      <p>To the fullest extent permitted by law, you release and hold harmless CityLinks, its founder, and any affiliated organizers from all claims arising out of your participation, including injuries while golfing, harm caused by other participants, and incidents during travel. This applies regardless of cause, including negligence.</p>
+      <h4>4. Tee Times and Greens Fees</h4>
+      <p>CityLinks facilitates connections but does not book, pay for, or guarantee tee times. When you book, you assume full financial responsibility. CityLinks is not liable for greens fees, penalties, or non-refundable charges if partners cancel.</p>
+      <h4>5. Media Release</h4>
+      <p>You grant CityLinks a perpetual, royalty-free license to use your name, image, likeness, and voice in media captured during CityLinks activities, for promotional purposes, without further notice or compensation.</p>
+      <h4>6. Indemnification</h4>
+      <p>You agree to indemnify and hold harmless CityLinks and its organizers from any claims arising from your conduct, participation, or violation of these terms.</p>
+      <h4>7. Governing Law</h4>
+      <p>These terms are governed by the laws of the State of New York. Disputes shall be resolved in the courts of New York County.</p>
+      <h4>8. Changes to These Terms</h4>
+      <p>CityLinks may update these terms. Continued use after an update constitutes acceptance.</p>
+    </div>
+    <label class="form-check" style="display:flex; gap:8px; align-items:flex-start; text-align:left; margin-bottom:14px;">
+      <input type="checkbox" id="gate-agree">
+      <span>I am 18 or older and I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a>, including the release of liability and media release.</span>
+    </label>
+    <button class="btn-submit" id="gate-accept-btn" disabled onclick="acceptTermsGate()">Accept and continue</button>
+    <button class="btn-submit" style="background:#9ca3af; margin-top:8px;" onclick="signOut()">Sign out</button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -478,6 +510,7 @@
     currentUser = session.user;
 
     await loadProfile();
+    if (!requireTermsAccepted()) return;  // blocks board until T&Cs accepted on first login
     updateNavUser();
     checkProfileComplete();
     await Promise.all([loadTeeTimes(), loadMembers()]);
@@ -515,6 +548,29 @@
   async function loadProfile() {
     const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
     currentProfile = data;
+  }
+
+  // ── TERMS GATE ────────────────────────────────────────────
+  // First login: block the board until the member accepts the T&Cs.
+  function requireTermsAccepted() {
+    if (currentProfile && currentProfile.terms_accepted_at) return true;
+    const gate = document.getElementById('terms-gate');
+    const cb   = document.getElementById('gate-agree');
+    const btn  = document.getElementById('gate-accept-btn');
+    cb.checked = false; btn.disabled = true;
+    cb.addEventListener('change', () => { btn.disabled = !cb.checked; });
+    gate.classList.add('open');
+    return false;
+  }
+
+  async function acceptTermsGate() {
+    const btn = document.getElementById('gate-accept-btn');
+    btn.textContent = 'Saving...'; btn.disabled = true;
+    const { error } = await sb.from('profiles')
+      .update({ terms_accepted_at: new Date().toISOString() })
+      .eq('id', currentUser.id);
+    if (error) { btn.textContent = 'Accept and continue'; btn.disabled = false; alert(error.message); return; }
+    location.reload();  // re-run load flow, now past the gate
   }
 
   function updateNavUser() {
