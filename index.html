@@ -287,7 +287,8 @@
         <div class="form-group"><label for="si-pass">Password</label><input class="form-input" type="password" id="si-pass" name="current-password" autocomplete="current-password" placeholder="••••••••" required></div>
         <button class="btn-full btn-full-green" type="submit" id="si-btn">Sign in</button>
       </form>
-      <div class="auth-footer"><a href="#" onclick="forgotPassword(event)">Forgot password?</a> &nbsp;·&nbsp; New here? <a href="#" onclick="scrollToJoin()">Join free</a></div>
+      <p class="auth-hint" style="font-size:0.85rem; color:#6b7280; margin:4px 0 0;">First time signing in? Enter your email above and click <strong>Set or reset password</strong> to create your password.</p>
+      <div class="auth-footer"><a href="#" onclick="forgotPassword(event)">Set or reset password</a> &nbsp;·&nbsp; New here? <a href="#" onclick="scrollToJoin()">Join free</a></div>
     </div>
 
     <!-- JOIN -->
@@ -514,7 +515,7 @@
       err.textContent = error.message;
       err.style.display = 'block';
     } else {
-      ok.textContent = 'Reset email sent. Check your inbox (and spam folder).';
+      ok.textContent = 'Email sent. Check your inbox (and spam folder) to set your password.';
       ok.style.display = 'block';
     }
   }
