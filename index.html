@@ -480,9 +480,16 @@
     const email = document.getElementById('su-email').value.trim();
     const pass  = document.getElementById('su-pass').value;
     btn.textContent = 'Creating account...'; btn.disabled = true; err.style.display = 'none'; ok.style.display = 'none';
-    const { error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: first, last_name: last } } });
+    const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { first_name: first, last_name: last } } });
     if (error) { err.textContent = error.message; err.style.display = 'block'; btn.textContent = 'Create my free account'; btn.disabled = false; }
-    else { ok.textContent = `Welcome, ${first}! Your account is ready. Sign in below.`; ok.style.display = 'block'; document.getElementById('signup-form').reset(); btn.textContent = 'Create my free account'; btn.disabled = false; }
+    else {
+      // No session means Supabase requires email confirmation before sign-in.
+      const needsConfirm = !data.session;
+      ok.textContent = needsConfirm
+        ? `Welcome, ${first}! Check your email to confirm your account, then sign in below.`
+        : `Welcome, ${first}! Your account is ready. Sign in below.`;
+      ok.style.display = 'block'; document.getElementById('signup-form').reset(); btn.textContent = 'Create my free account'; btn.disabled = false;
+    }
   }
 
   async function forgotPassword(e) {
