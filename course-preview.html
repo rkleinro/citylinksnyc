@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityLinks NYC — Course Image Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #0b0f0c; --bg2: #0f1410; --bg3: #141a15;
+      --border: #1e2a1f; --green: #8ecf72; --text: #f0ede8;
+      --muted:  #6a8a6a; --subtle: #3a5a3a;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 32px; min-height: 100vh; }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    .sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; max-width: 720px; line-height: 1.6; }
+
+    .filters { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .filter-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); padding: 7px 14px; border-radius: 16px; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; transition: all 0.15s; }
+    .filter-btn:hover { color: var(--text); border-color: var(--subtle); }
+    .filter-btn.active { background: var(--green); color: var(--bg); border-color: var(--green); }
+    .filter-count { opacity: 0.7; font-weight: 500; margin-left: 4px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.15s; }
+    .card:hover { border-color: var(--subtle); }
+    .photo-link { display: block; text-decoration: none; color: inherit; }
+    .photo { height: 160px; background-size: cover; background-position: center; background-color: var(--bg3); position: relative; }
+    .photo-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%); }
+    .name { position: absolute; bottom: 12px; left: 14px; right: 14px; font-size: 17px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+    .badge { position: absolute; top: 10px; right: 10px; font-size: 10px; padding: 4px 9px; border-radius: 10px; font-weight: 700; letter-spacing: 0.5px; }
+    .b-direct { background: var(--green); color: var(--bg); }
+    .b-wiki   { background: #d9a437; color: #1a1206; }
+    .b-none   { background: #6e3a3a; color: #fff; }
+    .meta { padding: 12px 16px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); line-height: 1.5; }
+    .meta strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 11px; font-weight: 600; }
+    .keywords { color: var(--green); font-family: 'SF Mono', 'Menlo', monospace; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <h1>Course image preview</h1>
+  <p class="sub">
+    Every curated course in the lookup table. <span style="color:var(--green)">Green badge</span> = direct image from the course's website.
+    <span style="color:#d9a437">Gold badge</span> = Wikipedia thumbnail fallback.
+    <span style="color:#c47a7a">Red badge</span> = no real image, generic golf photo. Click any tile to open the image source in a new tab.
+  </p>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All <span class="filter-count" id="count-all"></span></button>
+    <button class="filter-btn" data-filter="direct">Direct image <span class="filter-count" id="count-direct"></span></button>
+    <button class="filter-btn" data-filter="wiki">Wikipedia fallback <span class="filter-count" id="count-wiki"></span></button>
+    <button class="filter-btn" data-filter="none">Generic only <span class="filter-count" id="count-none"></span></button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+<script>
+  // ⚠️ Duplicate of COURSE_LOOKUP in board.html — keep in sync when adding courses.
+  const BETHPAGE_BLACK_IMG = 'https://www.bethpagegolfcourse.com/wp-content/uploads/2018/09/bethpage-18-1024x682.jpg';
+  const FERRY_POINT_IMG = 'https://casinos.ballys.com/golf-links-ferry-point/files/7658/DJI_0611_20240125145152.jpg';
+  const PELHAM_IMG      = 'https://www.pelhamsplitrock.com/wp-content/uploads/sites/30/2024/09/pelham-bay-banner-1024x282.jpg';
+
+  const COURSE_LOOKUP = [
+    { keywords: ['bethpage', 'black'],   displayName: 'Bethpage Black',  image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'red'],     displayName: 'Bethpage Red',    image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'blue'],    displayName: 'Bethpage Blue',   image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'green'],   displayName: 'Bethpage Green',  image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage', 'yellow'],  displayName: 'Bethpage Yellow', image: BETHPAGE_BLACK_IMG },
+    { keywords: ['bethpage'],            displayName: 'Bethpage State Park', image: BETHPAGE_BLACK_IMG },
+
+    { keywords: ['cortland'],            displayName: 'Van Cortlandt',  image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250527154002_0117_D.jpg' },
+    { keywords: ['clearview'],           displayName: 'Clearview Park', image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602090342_0320_D.jpg' },
+    { keywords: ['douglaston'],          displayName: 'Douglaston',     image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602065620_0078_D.jpg' },
+    { keywords: ['forest', 'park'],      displayName: 'Forest Park',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601183219_0717_D.jpg' },
+    { keywords: ['kissena'],             displayName: 'Kissena Park',   image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250602100712_0352_D.jpg' },
+    { keywords: ['la', 'tourette'],      displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601060238_0029_D.jpg' },
+    { keywords: ['latourette'],          displayName: 'La Tourette',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250601060238_0029_D.jpg' },
+    { keywords: ['silver', 'lake'],      displayName: 'Silver Lake',    image: '/silver-lake.jpg' },
+    { keywords: ['south', 'shore'],      displayName: 'South Shore',    image: 'https://www.golfnyc.com/wp-content/uploads/sites/9076/2025/09/DJI_20250531183229_0919_D.jpg' },
+
+    { keywords: ['split', 'rock'],       displayName: 'Split Rock',     image: PELHAM_IMG },
+    { keywords: ['pelham'],              displayName: 'Pelham Bay',     image: PELHAM_IMG },
+    { keywords: ['mosholu'],             displayName: 'Mosholu',        image: 'https://www.mosholugolf.com/wp-content/uploads/sites/7832/2025/01/DJI_20241107035619_0021_D-HDR.jpg' },
+    { keywords: ['dyker'],               displayName: 'Dyker Beach',    image: 'https://www.dykerbeachgc.com/wp-content/uploads/sites/12/2024/08/dyker-beach-golf-course-1024x592.jpg' },
+    { keywords: ['marine', 'park'],      displayName: 'Marine Park',    image: 'https://golf-pass-brightspot.s3.amazonaws.com/c4/31/b7cb09d6850f0c033404404a9b32/12905.jpg' },
+
+    { keywords: ['trump', 'ferry'],      displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
+    { keywords: ['ferry', 'point'],      displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
+    { keywords: ['ballys', 'ferry'],     displayName: "Bally's Ferry Point", image: FERRY_POINT_IMG },
+
+    { keywords: ['harbor', 'links'],     displayName: 'Harbor Links',                  image: 'https://www.harborlinks.com/wp-content/uploads/2025/01/304182599_533453718784016_3160601528738936402_n-1400x975.jpg' },
+    { keywords: ['middle', 'bay'],       displayName: 'The Golf Club at Middle Bay' },
+    { keywords: ['lawrence', 'yacht'],   displayName: 'Lawrence Yacht & Country Club', image: 'https://www.lycc.cc/wp-content/uploads/sites/8830/2024/01/Lawrence-Yacht-and-Country-Club-Flyover.jpg' },
+    { keywords: ['eisenhower'],          displayName: 'Eisenhower Park',        image: 'https://golf-pass-brightspot.s3.amazonaws.com/de/8e/12181e5cba4e0da4d9879500528c/105302.jpg' },
+    { keywords: ['bergen', 'point'],     displayName: 'Bergen Point',           wiki: 'Bergen Point Country Club' },
+    { keywords: ['sunken', 'meadow'],    displayName: 'Sunken Meadow',          wiki: 'Sunken Meadow State Park' },
+    { keywords: ['heckscher'],           displayName: 'Heckscher State Park',   wiki: 'Heckscher State Park' },
+    { keywords: ['montauk', 'downs'],    displayName: 'Montauk Downs',          wiki: 'Montauk Downs State Park' },
+    { keywords: ['indian', 'island'],    displayName: 'Indian Island',          wiki: 'Indian Island County Park' },
+    { keywords: ['lido'],                displayName: 'Lido Golf Club',         wiki: 'Lido Golf Club' },
+    { keywords: ['cantiague'],           displayName: 'Cantiague Park',         wiki: 'Cantiague Park' },
+
+    { keywords: ['pound', 'ridge'],      displayName: 'Pound Ridge Golf Club', image: 'https://cdn.sanity.io/images/03mhssoh/production/8bdbf90201548a905511fe7c68cfb785ffaa6685-6000x4000.jpg' },
+    { keywords: ['union', 'vale'],       displayName: 'The Links at Union Vale', image: 'https://golf-pass-brightspot.s3.amazonaws.com/4f/6f/a5c1fc22076b0f7d28e96ae33084/105281.jpg' },
+    { keywords: ['mansion', 'ridge'],    displayName: 'The Golf Club at Mansion Ridge' },
+    { keywords: ['saxon', 'woods'],      displayName: 'Saxon Woods',  wiki: 'Saxon Woods Park' },
+    { keywords: ['sprain', 'lake'],      displayName: 'Sprain Lake',  image: 'https://golf.westchestercountyny.gov/wp-content/uploads/2022/04/sprain-lake-cover-shot-e1651179755410.jpg' },
+    { keywords: ['mohansic'],            displayName: 'Mohansic',     image: 'https://golf-pass-brightspot.s3.amazonaws.com/e3/9b/2213c107e9b71f45c267b59ff269/66387.jpg' },
+    { keywords: ['dunwoodie'],           displayName: 'Dunwoodie',    image: 'https://golf-pass-brightspot.s3.amazonaws.com/e0/57/519ea9a716f8bbb06d386c5cdc6f/66389.jpg' },
+    { keywords: ['hudson', 'hills'],     displayName: 'Hudson Hills', wiki: 'Hudson Hills Golf Course' },
+    { keywords: ['maple', 'moor'],       displayName: 'Maple Moor',   wiki: 'Maple Moor Golf Course' },
+
+    { keywords: ['great', 'river'],      displayName: 'Great River Golf Club' },
+    { keywords: ['yale'],                displayName: 'Yale Golf Course', wiki: 'Yale Golf Course' },
+
+    { keywords: ['skyway'],              displayName: 'Skyway Golf Course',     image: 'https://skywaygolfcourse.com/wp-content/uploads/sites/4/2021/02/unspecified6.jpg' },
+    { keywords: ['neshanic'],            displayName: 'Neshanic Valley',        image: 'https://www.neshanicvalleygolf.com/wp-content/uploads/sites/893/2015/04/slider1.jpg' },
+    { keywords: ['rock', 'spring'],      displayName: 'Rock Spring Golf Club',   image: 'https://rockspringgolf.com/wp-content/uploads/sites/18/2022/11/rock-spring-golf-club-01.webp' },
+    { keywords: ['knoll'],               displayName: 'Knoll Country Club' },
+    { keywords: ['architects'],          displayName: 'The Architects Golf Club' },
+    { keywords: ['ballyowen'],           displayName: 'Ballyowen Golf Club',     image: 'https://golf-pass-brightspot.s3.amazonaws.com/c3/ee/6031e3701787f18bff33b2f9ec86/122739.jpg' },
+  ];
+
+  const PHOTOS = [
+    'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1592919505780-303950717480?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1611374243147-44a702c2d44c?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1576267423445-b2e0074d68a4?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1632922267756-9b71242b1592?w=700&q=80&fit=crop',
+    'https://images.unsplash.com/photo-1601925228050-b6f7ba43aef9?w=700&q=80&fit=crop',
+  ];
+  function genericPhoto(name) {
+    let h = 0;
+    for (let i = 0; i < (name||'').length; i++) { h = ((h << 5) - h) + name.charCodeAt(i); h |= 0; }
+    return PHOTOS[Math.abs(h) % PHOTOS.length];
+  }
+  function esc(s) { return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  async function fetchWikiThumb(title) {
+    try {
+      const res = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title));
+      if (!res.ok) return null;
+      const data = await res.json();
+      return (data.originalimage && data.originalimage.source)
+          || (data.thumbnail && data.thumbnail.source)
+          || null;
+    } catch (e) { return null; }
+  }
+
+  // Dedupe by displayName so "La Tourette" and "Bally's Ferry Point" only show once.
+  const seen = new Set();
+  const entries = COURSE_LOOKUP.filter(e => {
+    if (seen.has(e.displayName)) return false;
+    seen.add(e.displayName);
+    return true;
+  });
+
+  const sources = { direct: 0, wiki: 0, none: 0 };
+  const grid = document.getElementById('grid');
+
+  entries.forEach((entry, i) => {
+    const source = entry.image ? 'direct' : (entry.wiki ? 'wiki' : 'none');
+    sources[source]++;
+    const imageUrl = entry.image || genericPhoto(entry.displayName);
+    const badgeLabel = source === 'direct' ? 'WEBSITE' : source === 'wiki' ? 'WIKI' : 'GENERIC';
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.source = source;
+    card.dataset.index = i;
+    card.innerHTML = `
+      <a class="photo-link" href="${esc(imageUrl)}" target="_blank" rel="noopener">
+        <div class="photo" style="background-image:url('${esc(imageUrl)}')">
+          <div class="photo-overlay"></div>
+          <div class="badge b-${source}">${badgeLabel}</div>
+          <div class="name">${esc(entry.displayName)}</div>
+        </div>
+      </a>
+      <div class="meta">
+        <strong>Matches when typed name contains:</strong>
+        <span class="keywords">${entry.keywords.map(k => `"${k}"`).join(' + ')}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Fill in filter counts.
+  document.getElementById('count-all').textContent    = `(${entries.length})`;
+  document.getElementById('count-direct').textContent = `(${sources.direct})`;
+  document.getElementById('count-wiki').textContent   = `(${sources.wiki})`;
+  document.getElementById('count-none').textContent   = `(${sources.none})`;
+
+  // After cards are in the DOM, resolve Wikipedia thumbnails for wiki-source entries.
+  entries.forEach(async (entry) => {
+    if (!entry.wiki || entry.image) return;
+    const url = await fetchWikiThumb(entry.wiki);
+    if (!url) return;
+    const card = grid.querySelector(`.card[data-index="${entries.indexOf(entry)}"]`);
+    if (!card) return;
+    const photoEl = card.querySelector('.photo');
+    const link    = card.querySelector('.photo-link');
+    const probe = new Image();
+    probe.onload = () => {
+      photoEl.style.backgroundImage = `url('${url}')`;
+      if (link) link.href = url;
+    };
+    probe.src = url;
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.card').forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.source === filter) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>
